@@ -25,6 +25,11 @@ Evolvinator
 #include <PID_v1.h>
 // ^~> utilised "A PID controller calculates an 'error' value as the difference between a measured [Input] and a desired setpoint" http://playground.arduino.cc/Code/PIDLibrary
 
+#define TIME_MSG_LEN  11   // time sync to PC is HEADER followed by Unix time_t as ten ASCII digits
+#define TIME_HEADER  'T'   // Header tag for serial time sync message
+#define TIME_REQUEST  7    // ASCII bell character requests a time sync message 
+/*using above for simpler way of syncing time*/
+
 // Ethernet  
 byte mac[] = { 
   0x90, 0xA2, 0xDA, 0x00, 0x4F, 0x74 };   // ENTER MAC address of ethernet shield
@@ -130,14 +135,14 @@ void setup() {
   // Timer
   Udp.begin(localPort);
   // BREAK below is the point at which the code will break in absence of an ethernet cable
-//  setSyncProvider(getTime);                 // sync interval default is 5 mins
+  //setSyncProvider(getTime);                 // sync interval default is 5 mins 
   setSyncInterval(60 * 5);
   tUnixStart = tUnix; 
   tBackup = now();                          // set back up time
   msBackup = millis();                      // set assocated backup time on Arduino's internal clock
   msElapsedPrestart = millis();             // ms passed since power on to calculate unix time.
   if (debugMode) {
-    Serial.print("Back up time: ");
+    Serial.print("Main Script ~ Back up time: ");
     Serial.println(tBackup);
   }
 

@@ -2,9 +2,13 @@
 
 // Setting time to NTP server
 unsigned long getTime() {
+  // communicates to server via Ethernet, grabs epoch time, formats it for printing to serial, and returns epoch obj
   if (debugMode) Serial.println("Time being synced");
   sendNTPpacket(timeServer);                                           // send an NTP packet to a time server
-  delay(1000);                                                         // wait to see if a reply is available
+  delay(1000);  // wait to see if a reply is available
+
+/*alternative time syncing method required such as bash or*/
+
   if (Udp.parsePacket()) {  
     Udp.read(packetBuffer, NTP_PACKET_SIZE);                           // read the packet into the buffer
     unsigned long highWord = word(packetBuffer[40], packetBuffer[41]); // get timestamp words
@@ -43,10 +47,11 @@ unsigned long sendNTPpacket(byte *address)
   Udp.endPacket();
 }
 
+
 // timeCheck
 void timeCheck() {
   t = now();
-  if (year(t) == 2012 && currentMs - msBackup > 5 * 60000) {
+  if (year(t) == 1970 && currentMs - msBackup > 5 * 60000) {
     tBackup = now();
     msBackup = millis();
     if (debugMode) {
@@ -54,7 +59,7 @@ void timeCheck() {
       Serial.println(tBackup);
     }
   }
-  if (year(t) != 2012) {
+  if (year(t) != 1970) {
     if (debugMode) {
       Serial.println("Year is wrong: ");
       Serial.println(year(t));
