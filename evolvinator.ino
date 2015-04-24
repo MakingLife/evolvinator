@@ -90,7 +90,7 @@ const byte pinUVLED = 2;                  // pin that powers the UV LED
 
 // Modes
 boolean debugMode = true;
-boolean calibrationMode = false;
+boolean calibrationMode = true;
 
 // SD
 const int pinSD = 4;
@@ -129,7 +129,8 @@ void setup() {
 
   // Timer
   Udp.begin(localPort);
-  setSyncProvider(getTime);                 // sync interval default is 5 mins
+  // BREAK below is the point at which the code will break in absence of an ethernet cable
+//  setSyncProvider(getTime);                 // sync interval default is 5 mins
   setSyncInterval(60 * 5);
   tUnixStart = tUnix; 
   tBackup = now();                          // set back up time
