@@ -50,7 +50,8 @@ byte timeServer[] = {
 const int NTP_PACKET_SIZE= 48;            // NTP time stamp is in the first 48 bytes of the message
 byte packetBuffer[ NTP_PACKET_SIZE];      // buffer to hold incoming and outgoing packets from NTP
 
-time_t epoch;
+time_t epoch; // only other reference to epoch is within Evo_Time and it is retrieved via the server
+
 time_t tStart;                            // starting time
 time_t t;                                 // current time
 time_t tElapsed;                          // elapsed time (s)
@@ -174,7 +175,7 @@ void loop() {
 
   // Check and adjust time if neccessary
   currentMs = millis();
-  timeCheck();  
+  timeCheck();  // call to EvoTime
   
   // Check for web requests
   webLoop(); 
