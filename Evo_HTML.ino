@@ -225,12 +225,17 @@ void parseHttpHeader(EthernetClient client, boolean *dataRead) {
     ODCalibrate();
     reload = true;
     break;
+  case 'd':
+    // SDWebLoad(client);
+    *dataRead = true;
+    break;
   case 'e':
     c = client.read();
     char unixTimeStamp[11];
     for (int i=0; i < 10; i++) {
       unixTimeStamp[i] = client.read(); //record unix timestamp
     }
+    // SDWebLoadLIMS(client, unixTimeStamp);
     *dataRead = true;
     break;
   case 'a':

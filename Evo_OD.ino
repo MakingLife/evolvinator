@@ -62,6 +62,7 @@ float ODRead() {
   OD3MinAvg = (ODMin[0] + ODMin[1] + ODMin[2]) / 3;
 
   ODCount += 1; 
+  // SDDataLog('o', ODCount, 0);                     // save data point to SD card
 
   if (debugMode) Serial.println(ODMin[0]);
 

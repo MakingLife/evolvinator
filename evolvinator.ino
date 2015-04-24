@@ -21,13 +21,10 @@ Evolvinator
 #include <Ethernet.h>
 #include <EthernetUdp.h>
 #include <Time.h>
+#include <SD.h>
 #include <PID_v1.h>
 // ^~> utilised "A PID controller calculates an 'error' value as the difference between a measured [Input] and a desired setpoint" http://playground.arduino.cc/Code/PIDLibrary
 
-#define TIME_MSG_LEN  11   // time sync to PC is HEADER followed by Unix time_t as ten ASCII digits
-#define TIME_HEADER  'T'   // Header tag for serial time sync message
-#define TIME_REQUEST  7    // ASCII bell character requests a time sync message 
-/*using above for simpler way of syncing time*/
 
 // Ethernet  
 byte mac[] = { 
@@ -96,6 +93,9 @@ const byte pinUVLED = 2;                  // pin that powers the UV LED
 boolean debugMode = true;
 boolean calibrationMode = false;
 
+// SD
+// const int pinSD = 4;
+
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Setup - runs once <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 void setup() {
@@ -142,6 +142,9 @@ void setup() {
     Serial.print("Main Script ~ Back up time: ");
     Serial.println(tBackup);
   }
+  
+    // SD
+  // SD.begin(pinSD);
 
 }
 
@@ -211,6 +214,7 @@ void startRun() {
   tElapsed = 0;
   tUnixStart += (millis() - msElapsedPrestart) / 1000;    // to adjust unix time
   tUnix = tUnixStart + tElapsed;
+  // SDInitialize();
   digitalWrite(pinValve, LOW);          // open air valve
 }
 
