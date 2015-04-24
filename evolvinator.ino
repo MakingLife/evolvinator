@@ -21,7 +21,6 @@ Evolvinator
 #include <Ethernet.h>
 #include <EthernetUdp.h>
 #include <Time.h>
-#include <SD.h>
 #include <PID_v1.h>
 // ^~> utilised "A PID controller calculates an 'error' value as the difference between a measured [Input] and a desired setpoint" http://playground.arduino.cc/Code/PIDLibrary
 
@@ -95,10 +94,8 @@ const byte pinUVLED = 2;                  // pin that powers the UV LED
 
 // Modes
 boolean debugMode = true;
-boolean calibrationMode = true;
+boolean calibrationMode = false;
 
-// SD
-const int pinSD = 4;
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Setup - runs once <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 void setup() {
@@ -146,8 +143,6 @@ void setup() {
     Serial.println(tBackup);
   }
 
-  // SD
-  SD.begin(pinSD);
 }
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Loop - is program <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
@@ -185,6 +180,8 @@ void loop() {
   
   // Check for web requests
   webLoop(); 
+  // currently this loop makes no call to the startRun() function, which is the one doing the main work
+  startRun();
 }
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Functions - List function calls below <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
@@ -214,7 +211,6 @@ void startRun() {
   tElapsed = 0;
   tUnixStart += (millis() - msElapsedPrestart) / 1000;    // to adjust unix time
   tUnix = tUnixStart + tElapsed;
-  SDInitialize();
   digitalWrite(pinValve, LOW);          // open air valve
 }
 

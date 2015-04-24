@@ -53,7 +53,6 @@ void pulseFeed() {
   tone(pinP1FlowWrite, pulseFreq, pulseDuration);
   totalVol += pulseVol;
   tPulse = now();
-  SDDataLog('f', pulseCount, flowrateInstant);
 }
 
 // 1c addMedia - adds x ml of media
@@ -64,7 +63,6 @@ void addMedia(float addMediaMl) {
     totalVol += addMediaMl;
     pulseCount += 1;
     float flowrateInstant = pulseVol * 3600 / (now() - tPulse);
-    SDDataLog('f', pulseCount, flowrateInstant);
   }
   return;
 }
