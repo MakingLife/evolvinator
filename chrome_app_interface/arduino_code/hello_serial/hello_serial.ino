@@ -21,14 +21,26 @@ void loop() {
     // If there is, read the incoming byte.
     incomingByte = Serial.read();
     
+    switch(incomingByte){
+      case 'y':
+        // do
+        digitalWrite(LED, HIGH);
+        printLEDStatus();
+        break;
+      case 'n':
+        //do
+        digitalWrite(LED, LOW);
+        printLEDStatus();
+        break;
+    }
     // if "y" turn on the led, otherwise turn off 
-    if (incomingByte == 'y') {
+    /*if (incomingByte == 'y') {
       digitalWrite(LED, HIGH);
     } else if (incomingByte == 'n') {
       digitalWrite(LED, LOW);
-    }
+    }*/
 
-    printLEDStatus();
+    // printLEDStatus();
   }
   
   delay(1000);
