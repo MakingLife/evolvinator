@@ -13,7 +13,7 @@ var application_root = __dirname,
     path = require('path');
 
 var app = express();
-var port = 4711;
+var port = 6565;
 
 
 // Config server
