@@ -10,7 +10,7 @@
 #define LED 13
 #define DEBUG false
 
-String time="";
+String time="1200";
 int unitTime = 12;
 
 void setup() {
@@ -72,12 +72,12 @@ void printLEDStatus () {
     int ledStatus = digitalRead(LED);
     
     if(DEBUG){
-      
+      time = String(day())+" "+String(month());
     }
     
     // Create the JSON to send
     String json = "{\"ledStatus\": " + String(ledStatus)+","
-                   + "\"unitTime\" :" + unitTime 
+                   + "\"unitTime\" :" + time 
                   + "}";
     // '12:00' works fine but returns undefined, "12:00" breaks the JSOn parsing
     // Print JSON via serial

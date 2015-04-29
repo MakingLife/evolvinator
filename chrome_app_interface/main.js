@@ -116,13 +116,13 @@ connection.onReadLine.addListener(function(bell){
 
 connection.connect(DEVICE_PATH);
 
-function logJSON(ledstatus) {
+function logJSON(status) {
   //console.log("led status function being called");
   // Get the LED status from the Json returned by the Serial
   // 0 = off | 1 = on
-  console.log(typeof(jQuery.parseJSON( ledstatus)));
-  ledstatus = jQuery.parseJSON( ledstatus ).ledStatus ;
-  console.log(ledstatus);
+  console.log((jQuery.parseJSON( status)));
+  ledstatus = jQuery.parseJSON( status ).ledStatus ;
+  console.log(status);
   // Set the circle color according with the LED status
   if (ledstatus == 0)
      $('#statusCircle').css('fill','red');
@@ -131,7 +131,7 @@ function logJSON(ledstatus) {
 
   // Print led Status to HTML buffer area
   log(ledstatus);
-  //console.log(ledStatus);
+  console.log(ledStatus);
 }
 
 
