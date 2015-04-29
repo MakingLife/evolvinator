@@ -11,6 +11,7 @@
 #define DEBUG false
 
 String time="";
+int unitTime = 12;
 
 void setup() {
   Serial.begin(9600);
@@ -76,9 +77,9 @@ void printLEDStatus () {
     
     // Create the JSON to send
     String json = "{\"ledStatus\": " + String(ledStatus)+","
-                   + "\"time\" :" + '12:00' 
+                   + "\"unitTime\" :" + unitTime 
                   + "}";
-    
+    // '12:00' works fine but returns undefined, "12:00" breaks the JSOn parsing
     // Print JSON via serial
     Serial.println(json);
   
