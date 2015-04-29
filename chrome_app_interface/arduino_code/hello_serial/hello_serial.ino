@@ -11,7 +11,7 @@ void setup() {
   // Print the led Status to the serial in JSON format
   printLEDStatus();
   
-  // make a call to the serial for a value
+  // make a call to the serial for a time value
 }
 
 int incomingByte = 0;
@@ -55,7 +55,9 @@ void printLEDStatus () {
     int ledStatus = digitalRead(LED);
     
     // Create the JSON to send
-    String json = "{\"ledStatus\": " + String(ledStatus) + "}";
+    String json = "{\"ledStatus\": " + String(ledStatus)+","
+                   + "\"time\" :" + '12:00' 
+                  + "}";
     
     // Print JSON via serial
     Serial.println(json);

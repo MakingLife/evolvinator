@@ -61,7 +61,9 @@ SerialConnection.prototype.onReceive = function(receiveInfo) {
 };
 
 SerialConnection.prototype.onReceiveError = function(errorInfo) {
+
   if (errorInfo.connectionId === this.connectionId) {
+    console.log("connection error detected");
     this.onError.dispatch(errorInfo.error);
   }
 };
@@ -92,7 +94,8 @@ var connection = new SerialConnection();
 connection.onConnect.addListener(function() {
   log('connected to: ' + DEVICE_PATH);
   console.log('connected to: ' + DEVICE_PATH);
-  connection.send("hello arduino");
+  connection.send('T'+new Date().getTime());
+  //connection.send("hello arduino");
 });
 
 connection.onReadLine.addListener(function(line) {
@@ -109,14 +112,11 @@ connection.onReadLine.addListener(function(bell){
   }
 });
 
-connection.onError.addListener(function(){
-
-});
 
 connection.connect(DEVICE_PATH);
 
 function logJSON(ledstatus) {
-
+  console.log("led status function being called");
   // Get the LED status from the Json returned by the Serial
   // 0 = off | 1 = on
   ledstatus = jQuery.parseJSON( ledstatus ).ledStatus ;
