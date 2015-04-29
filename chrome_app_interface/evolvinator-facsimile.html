@@ -15,35 +15,35 @@ submitButton(client, "Zero OD Sensor", "z");
 fieldSubmitButton(client, "Add Media (ml):", "a");
 -->
 <!--submit button-->
-    <form method=post action="/?  {identifier} ">
-        <input type=submit value="{label}">
+    <form method=post action="/?d"> <!-- should pass case d to switch -->
+        <input type=submit value="Download Data">
     </form>
 
     <!--fieldSubmitButton-->
-    <form method=get action="/?">{{fieldLabel}}
-        <input type=txt name="{identifier}">
+    <form method=get action="/?">Change OD Threshold:
+        <input type=txt name="o">
         <input type=submit value="Submit">
     </form>
     <!--fieldSubmitButton-->
 
-    <form method=get action="/?">{{fieldLabel}}
-        <input type=txt name="{identifier}">
+    <form method=get action="/?">Change Max Flowrate (ml/h):
+        <input type=txt name="f">
         <input type=submit value="Submit">
     </form>
     <!--fieldSubmitButton-->
 
-    <form method=get action="/?">{{fieldLabel}}
-        <input type=txt name="{identifier}">
+    <form method=get action="/?">Change Temperature:
+        <input type=txt name="t">
         <input type=submit value="Submit">
     </form>
     <!--submit button-->
-    <form method=post action="/?  {identifier} ">
-        <input type=submit value="{label}">
+    <form method=post action="/?z">
+        <input type=submit value="Zero OD Sensor">
     </form>
 
     <!--fieldSubmitButton-->
-    <form method=get action="/?">{{fieldLabel}}
-        <input type=txt name="{identifier}">
+    <form method=get action="/?">Add Media (ml):
+        <input type=txt name="a">
         <input type=submit value="Submit">
     </form>
 </body>
