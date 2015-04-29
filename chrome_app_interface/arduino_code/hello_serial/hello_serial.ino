@@ -10,7 +10,7 @@
 #define LED 13
 #define DEBUG false
 
-String time="12:00";
+String time="";
 
 void setup() {
   Serial.begin(9600);
@@ -71,13 +71,12 @@ void printLEDStatus () {
     int ledStatus = digitalRead(LED);
     
     if(DEBUG){
-      time = String(day())+" "+String(month());
-      // time = dayStr()+" "+monthStr();
+      
     }
     
     // Create the JSON to send
     String json = "{\"ledStatus\": " + String(ledStatus)+","
-                   + "\"time\" :" + "12:00" 
+                   + "\"time\" :" + '12:00' 
                   + "}";
     
     // Print JSON via serial

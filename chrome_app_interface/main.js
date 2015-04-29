@@ -120,8 +120,8 @@ function logJSON(ledstatus) {
   // Get the LED status from the Json returned by the Serial
   // 0 = off | 1 = on
   ledstatus = jQuery.parseJSON( ledstatus ).ledStatus ;
-  console.log(typeof(ledstatus));
-  //console.log(ledstatus);
+  console.log(typeof(jQuery.parseJSON( ledstatus).unitTime));
+  console.log(ledstatus);
   // Set the circle color according with the LED status
   if (ledstatus == 0)
      $('#statusCircle').css('fill','red');
