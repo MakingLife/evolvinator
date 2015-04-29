@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>The Evolvinator</title>
+</head>
+<body>
+
+<!--Buttons to implement
+submitButton(client, "Download Data", "d"); // void submitButton(client, label, identifier)
+fieldSubmitButton(client, "Change OD Threshold:", "o"); // fieldSubmitButton(client, fieldLabel, identifier)
+fieldSubmitButton(client, "Change Max Flowrate (ml/h):", "f");
+fieldSubmitButton(client, "Change Temperature:", "t");
+submitButton(client, "Zero OD Sensor", "z");
+fieldSubmitButton(client, "Add Media (ml):", "a");
+-->
+<!--submit button-->
+    <form method=post action="/?  {identifier} ">
+        <input type=submit value="{label}">
+    </form>
+
+    <!--fieldSubmitButton-->
+    <form method=get action="/?">{{fieldLabel}}
+        <input type=txt name="{identifier}">
+        <input type=submit value="Submit">
+    </form>
+    <!--fieldSubmitButton-->
+
+    <form method=get action="/?">{{fieldLabel}}
+        <input type=txt name="{identifier}">
+        <input type=submit value="Submit">
+    </form>
+    <!--fieldSubmitButton-->
+
+    <form method=get action="/?">{{fieldLabel}}
+        <input type=txt name="{identifier}">
+        <input type=submit value="Submit">
+    </form>
+    <!--submit button-->
+    <form method=post action="/?  {identifier} ">
+        <input type=submit value="{label}">
+    </form>
+
+    <!--fieldSubmitButton-->
+    <form method=get action="/?">{{fieldLabel}}
+        <input type=txt name="{identifier}">
+        <input type=submit value="Submit">
+    </form>
+</body>
+</html>
