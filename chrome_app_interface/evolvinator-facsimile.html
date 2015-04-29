@@ -6,6 +6,22 @@
 </head>
 <body>
 
+<h1>Current Evolvinator Paramaters</h1>
+
+<div id="currentParams">
+    "Volume", volume, "ml" <br>
+    "OD Threshold", ODDesired, "A600"<br>
+    "OD Zero Value", ODZero, ""<br>
+    "Maximum Flow", flowMax, "ml/hr"<br>
+    "Pulse Volume", pulseVol, "ml"<br>
+    "Max Pulse Frequency" feedFrequency "seconds"<br>
+    "Temperature Desired", tempDesired, "C"<br>
+</div>
+<h1>Latest Evolvinator Run Data</h1>
+<div id="runData">
+
+</div>
+
 <!--Buttons to implement
 submitButton(client, "Download Data", "d"); // void submitButton(client, label, identifier)
 fieldSubmitButton(client, "Change OD Threshold:", "o"); // fieldSubmitButton(client, fieldLabel, identifier)
@@ -46,5 +62,11 @@ fieldSubmitButton(client, "Add Media (ml):", "a");
         <input type=txt name="a">
         <input type=submit value="Submit">
     </form>
+
+<br>
+<form method=post action="/?i">
+    <input type=submit value="Toggle Debug Mode">
+</form>
+
 </body>
 </html>
