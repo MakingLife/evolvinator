@@ -1,4 +1,5 @@
 #define LED 13
+#define DEBUG false
 
 void setup() {
   Serial.begin(9600);
@@ -11,7 +12,10 @@ void setup() {
   // Print the led Status to the serial in JSON format
   printLEDStatus();
   
-  // make a call to the serial for a time value
+  if(DEBUG){
+    // make a call to the serial for a time value
+  }
+  
 }
 
 int incomingByte = 0;
