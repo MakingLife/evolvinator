@@ -94,7 +94,7 @@ var connection = new SerialConnection();
 connection.onConnect.addListener(function() {
   log('connected to: ' + DEVICE_PATH);
   console.log('connected to: ' + DEVICE_PATH);
-  connection.send('T'+new Date().getTime());
+  //connection.send('T'+new Date().getTime());
   //connection.send("hello arduino");
 });
 
@@ -104,14 +104,14 @@ connection.onReadLine.addListener(function(line) {
   logJSON(line);
 });
 
-connection.onReadLine.addListener(function(bell){
-  if (bell===7){
-    console.log("Time Request Received");
-    connection.send('T'+new Date().getTime());
-  } else if (bell===0){
-    console.log("we have cross talk");
-  }
-});
+//connection.onReadLine.addListener(function(bell){
+//  if (bell===7){
+//    console.log("Time Request Received");
+//    connection.send('T'+new Date().getTime());
+//  } else if (bell===0){
+//    console.log("we have cross talk");
+//  }
+//});
 
 
 connection.connect(DEVICE_PATH);

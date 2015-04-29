@@ -22,19 +22,19 @@ void setup() {
   digitalWrite(LED, LOW);
 
   // Print the led Status to the serial in JSON format
-  printLEDStatus();
+  //  printLEDStatus();
   
-  if(DEBUG){
+
     // make a call to the serial for a time value
-    setSyncProvider( requestSync);
-  }
+  setSyncProvider( requestSync);
+
   
 }
 
 int incomingByte = 0;
 void loop() {
 
-  
+
   // Check if there's a serial message waiting.
   if (Serial.available() > 0) {
     // If there is, read the incoming byte.
@@ -111,4 +111,6 @@ time_t requestSync()
   Serial.print(TIME_REQUEST);
   return 0; // the time will be sent later in response to serial mesg
 }
+
+
 
