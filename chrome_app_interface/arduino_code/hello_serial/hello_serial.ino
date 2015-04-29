@@ -10,6 +10,8 @@ void setup() {
 
   // Print the led Status to the serial in JSON format
   printLEDStatus();
+  
+  // make a call to the serial for a value
 }
 
 int incomingByte = 0;

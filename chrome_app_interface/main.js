@@ -1,6 +1,6 @@
 // Serial used from your Arduino board
 // const DEVICE_PATH = 'COM11'; // PC
-const DEVICE_PATH = '/dev/ttyACM1'; //MAC
+const DEVICE_PATH = '/dev/ttyACM0'; //MAC
 const serial = chrome.serial;
 
 /* Interprets an ArrayBuffer as UTF-8 encoded string data. */
@@ -91,12 +91,26 @@ var connection = new SerialConnection();
 
 connection.onConnect.addListener(function() {
   log('connected to: ' + DEVICE_PATH);
+  console.log('connected to: ' + DEVICE_PATH);
   connection.send("hello arduino");
 });
 
 connection.onReadLine.addListener(function(line) {
   console.log(line); // confirm that arduino is sending the expected string
   logJSON(line);
+});
+
+connection.onReadLine.addListener(function(bell){
+  if (bell===7){
+    console.log("Time Request Received");
+    connection.send('T'+new Date().getTime());
+  } else if (bell===0){
+    console.log("we have cross talk");
+  }
+});
+
+connection.onError.addListener(function(){
+
 });
 
 connection.connect(DEVICE_PATH);

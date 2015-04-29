@@ -9,16 +9,24 @@
 <h1>Current Evolvinator Paramaters</h1>
 
 <div id="currentParams">
-    "Volume", volume, "ml" <br>
-    "OD Threshold", ODDesired, "A600"<br>
-    "OD Zero Value", ODZero, ""<br>
-    "Maximum Flow", flowMax, "ml/hr"<br>
-    "Pulse Volume", pulseVol, "ml"<br>
-    "Max Pulse Frequency" feedFrequency "seconds"<br>
-    "Temperature Desired", tempDesired, "C"<br>
+    Volume: {{volume}} ml <br>
+    OD Threshold: {{ODDesired}} A600<br>
+    OD Zero Value: {{ODZero}}<br>
+    Maximum Flow: {{flowMax}} ml/hr<br>
+    Pulse Volume: {{pulseVol}} ml<br>
+    Max Pulse Frequency: {{feedFrequency}} seconds<br>
+    Temperature Desired {{tempDesired}} C<br>
 </div>
 <h1>Latest Evolvinator Run Data</h1>
 <div id="runData">
+    One Minute Temperature Average: {{tempPrintAvg}} C<br>
+    <!--
+    the displayTime requires a bit more thought in terms of its string formatting
+    displayTime(client, "Run Started", tStart, true, false)<br>
+    displayTime(client, "Elapsed Time", tElapsed, false, true)<br>
+    -->
+    Last OD Measurement:{{ODMin[0]}}, A600<br>
+    3 Minute OD Average: {{OD3MinAvg}}, A600<br>
 
 </div>
 
