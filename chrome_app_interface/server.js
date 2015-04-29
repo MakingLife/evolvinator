@@ -43,9 +43,19 @@ app.configure(function(){
 // hello world
 
 app.get('/', function(req, res){
+    console.log("request = ");
+    console.log(req);
+    //console.log("response = "+res);
     res.send('running');
 });
 
+
+app.post('/', function(req, res){
+    console.log("request = ");
+    console.log(req);
+    //console.log("response = "+res);
+    //return(res.send(req));
+});
 
 app.listen(port, function(){
     console.log('Express server listening on port %d, public dir %s, in %s mode', port, application_root, app.settings.env);
