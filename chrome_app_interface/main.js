@@ -1,6 +1,6 @@
 // Serial used from your Arduino board
 // const DEVICE_PATH = 'COM11'; // PC
-const DEVICE_PATH = '/dev/ttyACM0'; //MAC
+const DEVICE_PATH = '/dev/ttyACM1'; //MAC
 const serial = chrome.serial;
 
 /* Interprets an ArrayBuffer as UTF-8 encoded string data. */
@@ -92,9 +92,11 @@ SerialConnection.prototype.disconnect = function() {
 var connection = new SerialConnection();
 
 connection.onConnect.addListener(function() {
+
+  connection.send('T'+new Date().getTime());
+
   log('connected to: ' + DEVICE_PATH);
-  console.log('connected to: ' + DEVICE_PATH);
-  //connection.send('T'+new Date().getTime());
+  //console.log('connected to: ' + DEVICE_PATH);
   //connection.send("hello arduino");
 });
 
@@ -104,17 +106,9 @@ connection.onReadLine.addListener(function(line) {
   logJSON(line);
 });
 
-//connection.onReadLine.addListener(function(bell){
-//  if (bell===7){
-//    console.log("Time Request Received");
-//    connection.send('T'+new Date().getTime());
-//  } else if (bell===0){
-//    console.log("we have cross talk");
-//  }
-//});
-
 
 connection.connect(DEVICE_PATH);
+//connection.send('T'+new Date().getTime());
 
 function logJSON(status) {
   //console.log("led status function being called");
@@ -143,6 +137,6 @@ var is_on = false;
 $('button').click(function() {
 
   is_on = !is_on;
-  connection.send(is_on ? 'y' : 'n');
+  connection.send(is_on ? 'T1430342577' : 'T1430342577');
 });
 
