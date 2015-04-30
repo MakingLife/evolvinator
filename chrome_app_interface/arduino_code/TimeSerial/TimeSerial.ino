@@ -19,6 +19,10 @@ void setup()  {
   Serial.begin(9600);
   // setSyncProvider( requestSync);  //set function to call when sync required
   //Serial.println("Waiting for sync message");
+  while(timeStatus()==0){
+    processSyncMessage();
+    delay(500);
+  }
 }
 
 void loop(){    
@@ -26,6 +30,12 @@ void loop(){
   {
     processSyncMessage();
   }
+  Serial.print("timeStatus() function currently returns ");
+  Serial.println(timeStatus()); // timeNotSet = 0, timeSet = 2
+  if(timeStatus()==0){
+    Serial.println("the time has not been set");
+  }
+  
   if(timeStatus()!= timeNotSet)   
   {
     digitalWrite(13,timeStatus() == timeSet); // on if synced, off if needs refresh  
