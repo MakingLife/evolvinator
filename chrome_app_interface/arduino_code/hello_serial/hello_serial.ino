@@ -57,8 +57,11 @@ void loop() {
 
     // printStatus();
   }
-  if(timeStatus()!= timeNotSet) {
+  if(timeStatus()== timeNotSet) {
+    // check to ensure time is global
     Serial.println("time is not set globally");
+  } else {
+    digitalClockDisplay();
   }
   Serial.flush();
   delay(1000);
@@ -67,7 +70,7 @@ void loop() {
 
 // Send the Led status via serial in JSON format
 void printStatus () {
-    digitalClockDisplay();
+    
    // read current LED status
     int ledStatus = digitalRead(LED);
     // Create the JSON to send
