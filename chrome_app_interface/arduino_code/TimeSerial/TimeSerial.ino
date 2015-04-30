@@ -17,7 +17,7 @@
 
 void setup()  {
   Serial.begin(9600);
-  setSyncProvider( requestSync);  //set function to call when sync required
+  // setSyncProvider( requestSync);  //set function to call when sync required
   //Serial.println("Waiting for sync message");
 }
 
