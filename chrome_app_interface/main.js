@@ -74,6 +74,7 @@ SerialConnection.prototype.connect = function(path) {
 };
 
 SerialConnection.prototype.send = function(msg) {
+  console.log('passing the message "'+msg+'" to the array buffer conversion function');
   if (this.connectionId < 0) {
     throw 'Invalid connection';
   }
@@ -154,6 +155,6 @@ $('#numbers').click(function() {
 });
 
 $('#verbose').click(function() {
-  connection.send('a long set of chars');
+  connection.send('a reallly really long set of chars');
 });
 
