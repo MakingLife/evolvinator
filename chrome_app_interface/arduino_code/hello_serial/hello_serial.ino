@@ -24,17 +24,12 @@ void setup() {
   // Print the led Status to the serial in JSON format
   //  printLEDStatus();
   
-
-    // make a call to the serial for a time value
+  // make a call to the serial for a time value
   setSyncProvider( requestSync);
-
-  
 }
 
 int incomingByte = 0;
 void loop() {
-
-
   // Check if there's a serial message waiting.
   if (Serial.available() > 0) {
     // If there is, read the incoming byte.
