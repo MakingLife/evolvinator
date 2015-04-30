@@ -19,16 +19,11 @@ void setup()  {
   Serial.begin(9600);
   // setSyncProvider( requestSync);  //set function to call when sync required
   //Serial.println("Waiting for sync message");
+  timeSync();
 }
 
 void loop(){
 
-  timeSync();
-  
-  if(Serial.available() ) 
-  {
-    processSyncMessage();
-  }
   Serial.print("timeStatus() function currently returns ");
   Serial.println(timeStatus()); // timeNotSet = 0, timeSet = 2
   if(timeStatus()==0){
@@ -92,7 +87,7 @@ time_t requestSync()
 void timeSync(){
   while(timeStatus()==0){
     Serial.println(timeStatus());
-    delay(500);
+    delay(1000);
     processSyncMessage();
   }
 }

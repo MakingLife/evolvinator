@@ -100,7 +100,7 @@ connection.onConnect.addListener(function() {
   //console.log('connected to: ' + DEVICE_PATH);
   //connection.send("hello arduino");
   connection.send('T'+new Date().getTime()); // these are never received by the arduino
-  connection.send('T1430342577');
+  //connection.send('T1430342577');
 });
 
 connection.onReadLine.addListener(function(line) {
@@ -124,10 +124,10 @@ connection.connect(DEVICE_PATH);
 //connection.send('T'+new Date().getTime());
 
 function logJSON(status) {
-  //console.log("led status function being called");
+  console.log("led status function being called");
   // Get the LED status from the Json returned by the Serial
   // 0 = off | 1 = on
-  console.log((jQuery.parseJSON( status)));
+  console.log((jQuery.parseJSON(status)));
   ledstatus = jQuery.parseJSON( status ).ledStatus ;
   console.log(status);
   // Set the circle color according with the LED status
