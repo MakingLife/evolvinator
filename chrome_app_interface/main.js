@@ -1,6 +1,6 @@
 // Serial used from your Arduino board
 // const DEVICE_PATH = 'COM11'; // PC
-const DEVICE_PATH = '/dev/ttyACM1'; //MAC
+const DEVICE_PATH = '/dev/ttyACM3'; //MAC
 const serial = chrome.serial;
 
 /* Interprets an ArrayBuffer as UTF-8 encoded string data. */
@@ -96,20 +96,29 @@ var connection = new SerialConnection();
 
 connection.onConnect.addListener(function() {
 
-  connection.send('T'+new Date().getTime());
-
   log('connected to: ' + DEVICE_PATH);
   //console.log('connected to: ' + DEVICE_PATH);
   //connection.send("hello arduino");
+  connection.send('T'+new Date().getTime()); // these are never received by the arduino
+  connection.send('T1430342577');
 });
 
 connection.onReadLine.addListener(function(line) {
   console.log(typeof(line)); // confirm that arduino is sending the expected string
   // above will always be a string because of function ab2str
+  //if(jQuery.parseJSON(line)===0) {
+  //  console.log("time being sought");
+  //  connection.send('T1430342577');
+  //}
   console.log(line);
   logJSON(line);
 });
-
+connection.onReadLine.addListener(function(bell) {
+  if(jQuery.parseJSON(bell)===0) {
+    console.log("time being sought");
+    connection.send('T'+new Date().getTime());
+  }
+});
 
 connection.connect(DEVICE_PATH);
 //connection.send('T'+new Date().getTime());
