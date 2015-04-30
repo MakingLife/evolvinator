@@ -55,11 +55,6 @@ void loop() {
 void printLEDStatus () {
    // read current LED status
     int ledStatus = digitalRead(LED);
-    
-    if(DEBUG){
-      time = String(day())+" "+String(month());
-    }
-    
     // Create the JSON to send
     String json = "{\"ledStatus\": " + String(ledStatus)+","
                    + "\"unitTime\" :" + time 

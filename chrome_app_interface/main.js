@@ -1,6 +1,6 @@
 // Serial used from your Arduino board
 // const DEVICE_PATH = 'COM11'; // PC
-const DEVICE_PATH = '/dev/ttyACM0'; //MAC
+const DEVICE_PATH = '/dev/ttyACM1'; //MAC
 const serial = chrome.serial;
 
 /* Interprets an ArrayBuffer as UTF-8 encoded string data. */
@@ -13,6 +13,7 @@ var ab2str = function(buf) {
 /* Converts a string to UTF-8 encoding in a Uint8Array; returns the array buffer. */
 var str2ab = function(str) {
   var encodedString = unescape(encodeURIComponent(str));
+  console.log("str2ab string = "+encodedString);
   var bytes = new Uint8Array(encodedString.length);
   for (var i = 0; i < encodedString.length; ++i) {
     bytes[i] = encodedString.charCodeAt(i);
@@ -77,6 +78,7 @@ SerialConnection.prototype.send = function(msg) {
     throw 'Invalid connection';
   }
   serial.send(this.connectionId, str2ab(msg), function() {});
+  //chrome.serial.send(integer connectionId, ArrayBuffer data, function callback)
 };
 
 SerialConnection.prototype.disconnect = function() {
@@ -102,6 +104,7 @@ connection.onConnect.addListener(function() {
 
 connection.onReadLine.addListener(function(line) {
   console.log(typeof(line)); // confirm that arduino is sending the expected string
+  // above will always be a string because of function ab2str
   console.log(line);
   logJSON(line);
 });
@@ -134,9 +137,23 @@ function log(msg) {
 }
 
 var is_on = false;
-$('button').click(function() {
+$('#toggle').click(function() {
 
   is_on = !is_on;
-  connection.send(is_on ? 'T1430342577' : 'T1430342577');
+  connection.send(is_on ? 'y' : 'n');
+
+  // 'T1430342577'
+});
+$('#time').click(function() {
+  connection.send('T1430342577');
+  // when received back the byte count behaves erratically
+});
+
+$('#numbers').click(function() {
+  connection.send('1234567891011'); // above behaviour appears to be a flaw of sending numbers via a UTF8 buffer
+});
+
+$('#verbose').click(function() {
+  connection.send('a long set of chars');
 });
 
