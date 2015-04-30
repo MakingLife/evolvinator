@@ -57,6 +57,9 @@ void loop() {
 
     // printStatus();
   }
+  if(timeStatus()!= timeNotSet) {
+    Serial.println("time is not set globally");
+  }
   Serial.flush();
   delay(1000);
 
