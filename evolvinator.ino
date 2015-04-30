@@ -106,7 +106,7 @@ void setup() {
   Serial.begin(9600);
   pinMode(53, OUTPUT);                      // SS pin on Mega
   Ethernet.begin(mac, ip);
-  server.begin();
+  server.begin();                            // start server EtherNetServer library Functionality
   delay(1);                                 // give it a msecond to connect
 
   // Pump Control
@@ -130,14 +130,15 @@ void setup() {
   tempPID.SetOutputLimits(0, 70);
 
   // Timer
-  Udp.begin(localPort);
+  Udp.begin(localPort); // EthernetUDP library functionality
   // BREAK below is the point at which the code will break in absence of an ethernet cable
-  //setSyncProvider(getTime);                 // sync interval default is 5 mins 
-  setSyncInterval(60 * 5);
-  tUnixStart = tUnix; 
-  tBackup = now();                          // set back up time
-  msBackup = millis();                      // set assocated backup time on Arduino's internal clock
-  msElapsedPrestart = millis();             // ms passed since power on to calculate unix time.
+  setSyncProvider(getEpoch);    // function which sets tUnix and epoch, but only returns epoch. However both vars are global             
+  // sync interval default is 5 mins 
+  setSyncInterval(60 * 5);                    // Time.h functionality: Set the number of seconds between re-sync - this function keeps everything on time
+  tUnixStart = tUnix;                       // Time.h variable common to local and Evo_Time
+  tBackup = now();                          // set back up time, Time.h NOT Evo_Time
+  msBackup = millis();                      // set assocated backup time on Arduino's internal clock, Time.h NOT Evo_Time
+  msElapsedPrestart = millis();             // ms passed since power on to calculate unix time, Time.h NOT Evo_Time
   if (debugMode) {
     Serial.print("Main Script ~ Back up time: ");
     Serial.println(tBackup);
@@ -153,7 +154,7 @@ void loop() {
 
   // If run has started
   if (tStart) {
-    // Take OD measurement ever minute
+    // Take OD measurement ever minute, not dependant on Evo_Time
     currentMs = millis();
     if (currentMs - oldMsODRead > 60000) {
       ODRead(); // call to Evo_OD
@@ -175,11 +176,11 @@ void loop() {
     oldMsTempRead = currentMs;
   }
   // PID adjust every 10 seconds
-  tempWrite(); 
+  tempWrite(); // where the 10 seconds delay???
 
   // Check and adjust time if neccessary
   currentMs = millis();
-  timeCheck();  // call to EvoTime
+  timeCheck();  // call to EvoTime, uses tStart variable from THIS file
   
   // Check for web requests
   webLoop(); 
