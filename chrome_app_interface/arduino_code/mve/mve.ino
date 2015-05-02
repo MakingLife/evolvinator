@@ -21,11 +21,13 @@
     setTime(8,29,0,2,5,15); 
     // (hr,min,sec,day,month,yr)
     // set time to some generic vals
+    pinMode(pinValve, OUTPUT);  
   }
   
   // this code will be run data, main void loop()
   void loop() {
     // If run has started
+    digitalWrite(pinValve, LOW);
     if (tStart) {
       
       // take a sensor measurement
@@ -50,30 +52,29 @@
     char c;
     if (Serial.available()) {
       c = Serial.read();
+        switch (c) {
+        /* the two cases we are interested in presently are 
+        startRun();
+        dataRead(); // download data
+        */
+          case 'y':
+            // do
+            startRun();
+            break;
+          case 'n':
+            //do
+            break;    
+        }
     }
     else {
       return;
     }
     
-    switch (c) {
-    /* the two cases we are interested in presently are 
-    startRun();
-    dataRead(); // download data
-    */
-      case 'y':
-        // do
-        startRun();
-        break;
-      case 'n':
-        //do
-        break;    
-    }
   }
   void timeCheck(){
     // this code also has to call to the Serial
     Serial.println("checking the time");
     delay(1000);
-    Serial.println("time checked");
   }
   
   void dataRead(){
@@ -88,8 +89,8 @@
     tUnixStart += (millis() - msElapsedPrestart) / 1000;    // to adjust unix time
     tUnix = tUnixStart + tElapsed;
     // SDInitialize();
-    digitalWrite(pinValve, LOW);          // open air valve ~ subsitute with a LED
-    delay(1000);
+    digitalWrite(pinValve, HIGH);          // open air valve ~ subsitute with a LED with attendant change on the logic
+    delay(2000);
   }
   
   void SensorRead(){
