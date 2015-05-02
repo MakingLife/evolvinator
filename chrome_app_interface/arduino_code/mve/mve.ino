@@ -1,9 +1,10 @@
 // the minimum viable evolvinator
 
   #include <Time.h>
-  #define TIME_MSG_LEN  11   // time sync to PC is HEADER followed by unix time_t as ten ascii digits
+  #define TIME_MSG_LEN  12   // time sync to PC is HEADER followed by unix time_t as ten ascii digits
   #define TIME_HEADER  'T'   // Header tag for serial time sync message
-
+  #define TERM_FOOTER 'Q'
+  
   unsigned long currentMs;
   unsigned long msElapsedPrestart;
   unsigned long tUnixStart;                 // unix time at run start
@@ -77,9 +78,9 @@
     // this code also has to call to the Serial
     // so what would be ideal here is some way of it knowing that a serial connection has been made to the chrome app - like a handshake
     Serial.println(0);
-    delay(1000);
-    
+    delay(50);
     if (Serial.available()) {
+      Serial.println("arduino attempt to set time");
         while(Serial.available() >=  TIME_MSG_LEN ){  // time message consists of a header and ten ascii digits
           char c = Serial.read() ; 
           //Serial.print(c);  
@@ -92,9 +93,12 @@
               }
             }   
             setTime(pctime);   // Sync Arduino clock to the time received on the serial port
+          } else if (c == TERM_FOOTER) {
+            return;
           }
         }
     }
+    delay(1000);
   }
   
   void dataRead(){
