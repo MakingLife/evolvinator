@@ -132,7 +132,7 @@ void setup() {
   // Timer
   Udp.begin(localPort); // EthernetUDP library functionality
   // BREAK below is the point at which the code will break in absence of an ethernet cable
-  setSyncProvider(getEpoch);    // function which sets tUnix and epoch, but only returns epoch. However both vars are global             
+  setSyncProvider(getTime);    // function which sets tUnix and epoch, but only returns epoch. However both vars are global             
   // sync interval default is 5 mins 
   setSyncInterval(60 * 5);                    // Time.h functionality: Set the number of seconds between re-sync - this function keeps everything on time
   tUnixStart = tUnix;                       // Time.h variable common to local and Evo_Time
@@ -185,7 +185,7 @@ void loop() {
   // Check for web requests
   webLoop(); 
   // currently this loop makes no call to the startRun() function, which is the one doing the main work
-  startRun();
+  // startRun();
 }
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Functions - List function calls below <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 

@@ -1,6 +1,6 @@
 // Serial used from your Arduino board
 // const DEVICE_PATH = 'COM11'; // PC
-const DEVICE_PATH = '/dev/ttyACM3'; //MAC
+const DEVICE_PATH = '/dev/ttyACM0'; //MAC
 const serial = chrome.serial;
 
 /* Interprets an ArrayBuffer as UTF-8 encoded string data. */
@@ -124,12 +124,13 @@ connection.connect(DEVICE_PATH);
 //connection.send('T'+new Date().getTime());
 
 function logJSON(status) {
-  console.log("led status function being called");
+  // console.log("led status function being called");
+
   // Get the LED status from the Json returned by the Serial
   // 0 = off | 1 = on
-  console.log((jQuery.parseJSON(status)));
+  // console.log((jQuery.parseJSON(status)));
   ledstatus = jQuery.parseJSON( status ).ledStatus ;
-  console.log(status);
+  // console.log(status);
   // Set the circle color according with the LED status
   if (ledstatus == 0)
      $('#statusCircle').css('fill','red');
