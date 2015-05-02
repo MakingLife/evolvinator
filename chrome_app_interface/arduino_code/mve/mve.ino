@@ -73,12 +73,20 @@
   }
   void timeCheck(){
     // this code also has to call to the Serial
-    Serial.println("checking the time");
+    // so what would be ideal here is some way of it knowing that a serial connection has been made to the chrome app - like a handshake
+    Serial.println(0);
     delay(1000);
+    
+    if (Serial.available()) {
+    
+    }
   }
   
   void dataRead(){
     // a function to handle storing data
+    if (Serial.available()) {
+    
+    }
   } 
    
   void startRun() {
