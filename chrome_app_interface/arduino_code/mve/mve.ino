@@ -43,12 +43,12 @@
       }
     }
     // in the other code there are measurements that will happen irrespective of a run having been started
-    
+    digitalClockDisplay();
       // Check and adjust time if neccessary
     currentMs = millis();
     timeCheck();  // only time that a call to check external time is necessary
     Serial.flush();
-    // delay(1000);
+    delay(1000);
     interface();
   }
   
@@ -57,12 +57,15 @@
     //Serial.flush();
     char c;
     if (Serial.available()) {
-      c = Serial.read();
-        switch (c) {
-        /* the two cases we are interested in presently are 
+      s = Serial.read();
+      
+              /* the two cases we are interested in presently are 
         startRun();
         dataRead(); // download data
         */
+      
+      /*  switch (s) {
+
           case 'y':
             // do
             Serial.print("you have entered ");
@@ -77,7 +80,8 @@
             Serial.print("this is what i'm working wth here: ");
             Serial.println(c);
             break; // without break the serial flushing seems a non issue    
-        }
+        }  
+        */
     }
     else {
       return;
@@ -91,17 +95,19 @@
     Serial.println(0);
     Serial.println("syncing time");
     timeSync();
-     delay(1000);
+    delay(1000);
      //Serial.flush();
   } // end function
   
   
 void timeSync() {
   // if time sync available from serial port, update time and return true
+  // while(Serial.available()){  
   while(Serial.available() >=  TIME_MSG_LEN ){  // time message consists of a header and ten ascii digits
+    
     char c = Serial.read() ; 
-    Serial.print(c);  
-    if( c == TIME_HEADER ) {       
+    // Serial.print(c);  
+    if( c == TIME_HEADER ) { // this never executes       
       time_t pctime = 0;
       for(int i=0; i < TIME_MSG_LEN -1; i++){   
         c = Serial.read();          
@@ -111,6 +117,7 @@ void timeSync() {
       }   
       setTime(pctime);   // Sync Arduino clock to the time received on the serial port
       Serial.println("time sync go");
+      return;
     }  
   }
 
@@ -173,3 +180,26 @@ void timeSync() {
     Serial.println(value);
   
   }
+  
+  // human readable formatting
+  
+  void digitalClockDisplay(){
+  // digital clock display of the time
+  Serial.print(hour());
+  printDigits(minute());
+  printDigits(second());
+  Serial.print(" ");
+  Serial.print(day());
+  Serial.print(" ");
+  Serial.print(month());
+  Serial.print(" ");
+  Serial.print(year()); 
+  Serial.println(); 
+}
+void printDigits(int digits){
+  // utility function for digital clock display: prints preceding colon and leading 0
+  Serial.print(":");
+  if(digits < 10)
+    Serial.print('0');
+  Serial.print(digits);
+}
