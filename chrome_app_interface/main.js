@@ -82,6 +82,10 @@ SerialConnection.prototype.send = function(msg) {
   //chrome.serial.send(integer connectionId, ArrayBuffer data, function callback)
 };
 
+SerialConnection.prototype.flush = function(){
+
+}
+
 SerialConnection.prototype.disconnect = function() {
   if (this.connectionId < 0) {
     throw 'Invalid connection';

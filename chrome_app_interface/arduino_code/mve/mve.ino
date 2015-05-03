@@ -54,13 +54,15 @@
   
   void interface(){
     Serial.println("checking for user input");
-    Serial.flush();
+    Stream.flush();
     delay(1000);
   // this code handles interactivity from the interface, ergo Serial
 
     char s;
 //    if (Serial.available()) { // not working with current loop
-    while(!Serial.available()) { // basically pauses the program until input received
+    while(!Serial.available()) { 
+      // basically pauses the program until input received,returns 0 when no serial has been sent, not 0 = 1
+    // however the above boolean will only work once, once any serial has been received it always evals to false
       s = Serial.read();
       
               /* the two cases we are interested in presently are 
