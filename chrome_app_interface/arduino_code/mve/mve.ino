@@ -9,6 +9,7 @@
   unsigned long msElapsedPrestart;
   unsigned long tUnixStart;                 // unix time at run start
   unsigned long tUnix;                      // unix time
+  unsigned long countdown;
   time_t tStart;                            // starting time
   time_t t;                                 // current time
   time_t tElapsed;                          // elapsed time (s)  
@@ -29,6 +30,7 @@
   
   // this code will be run data, main void loop()
   void loop() {
+    Serial.println("begin");
     // If run has started
     digitalWrite(pinValve, LOW);
     if (tStart) {
@@ -54,10 +56,8 @@
   
   void interface(){
     Serial.println("checking for user input");
-    Stream.flush();
-    delay(1000);
+    //delay(1000);
   // this code handles interactivity from the interface, ergo Serial
-
     char s;
 //    if (Serial.available()) { // not working with current loop
     while(!Serial.available()) { 
@@ -87,7 +87,7 @@
             Serial.println(s);
             break; // without break the serial flushing seems a non issue    
           */
-        }  
+        }
         Serial.flush();
     } // end while
 //    else {

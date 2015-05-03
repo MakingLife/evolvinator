@@ -1,6 +1,6 @@
 // Serial used from your Arduino board
 // const DEVICE_PATH = 'COM11'; // PC
-const DEVICE_PATH = '/dev/ttyACM1'; //MAC
+const DEVICE_PATH = '/dev/ttyACM2'; //MAC
 const serial = chrome.serial;
 
 /* Interprets an ArrayBuffer as UTF-8 encoded string data. */
@@ -83,7 +83,10 @@ SerialConnection.prototype.send = function(msg) {
 };
 
 SerialConnection.prototype.flush = function(){
-
+  if (this.connectionId < 0) {
+    throw 'Invalid connection';
+  }
+  serial.flush(this.connectionId, function() {});
 }
 
 SerialConnection.prototype.disconnect = function() {
@@ -116,11 +119,13 @@ connection.onReadLine.addListener(function(line) {
   //}
   console.log(line);
   logJSON(line);
+  connection.flush();
 });
 connection.onReadLine.addListener(function(bell) {
   if(jQuery.parseJSON(bell)===0) {
     console.log("time being sought");
     connection.send('T'+new Date().getTime());
+    connection.flush();
   }
 });
 
