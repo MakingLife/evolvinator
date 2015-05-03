@@ -99,7 +99,7 @@ connection.onConnect.addListener(function() {
   log('connected to: ' + DEVICE_PATH);
   //console.log('connected to: ' + DEVICE_PATH);
   //connection.send("hello arduino");
-  connection.send('T'+new Date().getTime()); // these are never received by the arduino
+  // connection.send('T'+new Date().getTime()); // these are never received by the arduino
   //connection.send('T1430342577');
 });
 
@@ -116,7 +116,7 @@ connection.onReadLine.addListener(function(line) {
 connection.onReadLine.addListener(function(bell) {
   if(jQuery.parseJSON(bell)===0) {
     console.log("time being sought");
-    connection.send('T'+new Date().getTime()+'Q');
+    connection.send('T'+new Date().getTime());
   }
 });
 

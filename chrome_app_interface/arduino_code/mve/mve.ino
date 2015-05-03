@@ -52,6 +52,7 @@
   
   void interface(){
   // this code handles interactivity from the interface, ergo Serial
+    Serial.flush();
     char c;
     if (Serial.available()) {
       c = Serial.read();
@@ -62,52 +63,56 @@
         */
           case 'y':
             // do
+            Serial.print("you have entered ");
+            Serial.print(c);
+            Serial.println(" this means you wish to start a run");
             startRun();
             break;
           case 'n':
             //do
-            break;    
+            break;
+          default:
+            Serial.print("this is what i'm working wth here: ");
+            Serial.println(c);
+            break; // without break the serial flushing seems a non issue    
         }
     }
     else {
       return;
     }
-    
+    //Serial.flush();
   }
+  
   void timeCheck(){
     // this code also has to call to the Serial
     // so what would be ideal here is some way of it knowing that a serial connection has been made to the chrome app - like a handshake
     Serial.println(0);
-    //if (Serial.available()) {
-        //Serial.println("arduino attempt to set time"); // definitely detecting the transmission of serial
-        timeSync();
-    //} // end first  if
-    delay(1000);
+    Serial.println("syncing time");
+    //timeSync();
+     delay(1000);
+     Serial.flush();
   } // end function
   
   
-  void timeSync(){
-        //while(Serial.available() >=  TIME_MSG_LEN ){
-         while(Serial.available()){  // time message consists of a header and ten ascii digits
-          char c = Serial.read() ; 
-          Serial.print(c);  
-          //if( c == TIME_HEADER ) {
-            // Serial.println("time header logic functional as expected");       
-            time_t pctime = 0;
-            for(int i=0; i < TIME_MSG_LEN -3; i++){   
-              c = Serial.read();
-              Serial.println(c);          
-              if( c >= '0' && c <= '9'){   
-                pctime = (10 * pctime) + (c - '0') ; // convert digits to a number    
-              } else if (c == TERM_FOOTER) {
-                return;
-              } 
-            }   // end for
-            setTime(pctime);   // Sync Arduino clock to the time received on the serial port
-            return;
-          // } // end if header 
-        } // end while
+void timeSync() {
+  // if time sync available from serial port, update time and return true
+  while(Serial.available() >=  TIME_MSG_LEN ){  // time message consists of a header and ten ascii digits
+    char c = Serial.read() ; 
+    Serial.print(c);  
+    if( c == TIME_HEADER ) {       
+      time_t pctime = 0;
+      for(int i=0; i < TIME_MSG_LEN -1; i++){   
+        c = Serial.read();          
+        if( c >= '0' && c <= '9'){   
+          pctime = (10 * pctime) + (c - '0') ; // convert digits to a number    
+        }
+      }   
+      setTime(pctime);   // Sync Arduino clock to the time received on the serial port
+      Serial.println("time sync go");
+    }  
   }
+
+}
   
   void dataRead(){
     // a function to handle storing data
