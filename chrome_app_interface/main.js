@@ -78,7 +78,7 @@ SerialConnection.prototype.send = function(msg) {
   if (this.connectionId < 0) {
     throw 'Invalid connection';
   }
-  serial.flush(this.connectionId, function() {});
+  // serial.flush(this.connectionId, function() {});
   serial.send(this.connectionId, str2ab(msg), function() {});
   //chrome.serial.send(integer connectionId, ArrayBuffer data, function callback)
 };
@@ -157,15 +157,16 @@ function log(msg) {
   $('#buffer').append(msg + '<br/>');
 }
 
-var is_on = false;
-$('#toggle').click(function() {
-
-  is_on = !is_on;
-  connection.send(is_on ? 'y' : 'n');
-  //connection.send('y');
-
-  // 'T1430342577'
+$('#start').click(function() {
+  connection.send('y');
+  // when received back the byte count behaves erratically
 });
+
+$('#halt').click(function() {
+  connection.send('n');
+  // when received back the byte count behaves erratically
+});
+
 $('#time').click(function() {
   connection.send('T1430342577');
   // when received back the byte count behaves erratically
@@ -178,4 +179,15 @@ $('#numbers').click(function() {
 $('#verbose').click(function() {
   connection.send('a reallly really long set of chars');
 });
+
+var is_on = false;
+$('#toggle').click(function() {
+
+  is_on = !is_on;
+  connection.send(is_on ? 'y' : 'n');
+  //connection.send('y');
+
+  // 'T1430342577'
+});
+
 

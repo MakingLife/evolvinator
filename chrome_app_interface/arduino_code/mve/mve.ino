@@ -18,28 +18,33 @@
   time_t tElapsed;                          // elapsed time (s)  
   
   boolean userInput = false;
+  boolean halt = false;
   
   // OD aka generic sensor
   unsigned long oldMsODRead = 0;
   const byte pinODLED = 1;                  // pin that powers the OD LED
   const byte pinODRead = A1;                // pin that reads the OD sensor
-  const byte pinValve = 13;                  // pin that controls the valve
+  const byte pinValve = 3;                  // pin that controls the valve
+  
+  int led = 13;
   
   void setup(){
     Serial.begin(9600);
     setTime(8,29,0,2,5,15); 
     // (hr,min,sec,day,month,yr)
     // set time to some generic vals
-    pinMode(pinValve, OUTPUT);  
+    pinMode(led, OUTPUT);  
   }
   
   // this code will be run data, main void loop()
   void loop() {
     Serial.println("loop() begin");
     // If run has started
-    digitalWrite(pinValve, LOW);
-    if (tStart) {
+    digitalWrite(led, LOW);
+    if (tStart && !halt) {
       Serial.println("measure me some sensors");
+      Serial.print("run commenced at: ");
+      digitalClockDisplay();
       // take a sensor measurement
       currentMs = millis();
       if (currentMs - oldMsODRead > 60000) {
@@ -48,6 +53,10 @@
         oldMsODRead = currentMs; 
         // handles doing this once a minute without cause for external time reference
       }
+      digitalWrite(led, HIGH);          // open air valve ~ subsitute with a LED with attendant change on the logic
+      delay(10000);
+      Serial.print("run concluded at: ");
+      digitalClockDisplay();
     }
     // in the other code there are measurements that will happen irrespective of a run having been started
     digitalClockDisplay();
@@ -111,10 +120,15 @@ void timeSync() {
             Serial.print("you have entered ");
             Serial.print(s);
             Serial.println(" this means you wish to start a run");
+            halt = false;
             startRun();
             break;
           case 'n':
             //do
+            Serial.print("you have entered ");
+            Serial.print(s);
+            Serial.println(" this means you wish to suspend measurements");
+            halt = true;
             break;
           /* case 'd':
             dataRead();
@@ -135,16 +149,11 @@ void timeSync() {
    
   void startRun() {
     tStart = now();
-    Serial.print("run commenced at: ");
-    digitalClockDisplay();
     tElapsed = 0;
     tUnixStart += (millis() - msElapsedPrestart) / 1000;    // to adjust unix time
     tUnix = tUnixStart + tElapsed;
     // SDInitialize();
-    digitalWrite(pinValve, HIGH);          // open air valve ~ subsitute with a LED with attendant change on the logic
-    delay(10000);
-    Serial.print("run concluded at: ");
-    digitalClockDisplay();
+    // digitalWrite(pinValve, LOW);          // open air valve
   }
   
   void SensorRead(){
