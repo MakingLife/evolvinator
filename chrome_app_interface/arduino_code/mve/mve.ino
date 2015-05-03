@@ -48,11 +48,12 @@
     currentMs = millis();
     timeCheck();  // only time that a call to check external time is necessary
     Serial.flush();
-    // delay(1000);
+    delay(1000);//
     interface();
   }
   
   void interface(){
+    Serial.println("checking for user input");
   // this code handles interactivity from the interface, ergo Serial
     //Serial.flush();
     char s;
@@ -76,10 +77,11 @@
           case 'n':
             //do
             break;
-          default:
+          /*default:
             Serial.print("this is what i'm working wth here: ");
             Serial.println(s);
             break; // without break the serial flushing seems a non issue    
+          */
         }  
         
     }
