@@ -59,8 +59,9 @@
       // this code also has to call to the Serial
       // so what would be ideal here is some way of it knowing that a serial connection has been made to the chrome app - like a handshake
       Serial.println(0);
-      timeSync();
       delay(1000);
+      timeSync();
+      
        //Serial.flush();
     } // end function
   
