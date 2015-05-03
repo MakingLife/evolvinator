@@ -80,10 +80,10 @@
     Serial.println(0);
     delay(50);
     if (Serial.available()) {
-      Serial.println("arduino attempt to set time");
-        while(Serial.available() >=  TIME_MSG_LEN ){  // time message consists of a header and ten ascii digits
+      //Serial.println("arduino attempt to set time"); // definitely detecting the transmission of serial
+        while(Serial.available()){  // time message consists of a header and ten ascii digits
           char c = Serial.read() ; 
-          //Serial.print(c);  
+          Serial.print(c);  
           if( c == TIME_HEADER ) {       
             time_t pctime = 0;
             for(int i=0; i < TIME_MSG_LEN -1; i++){   
@@ -93,6 +93,7 @@
               }
             }   
             setTime(pctime);   // Sync Arduino clock to the time received on the serial port
+            return;
           } else if (c == TERM_FOOTER) {
             return;
           }

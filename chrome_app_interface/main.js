@@ -116,7 +116,7 @@ connection.onReadLine.addListener(function(line) {
 connection.onReadLine.addListener(function(bell) {
   if(jQuery.parseJSON(bell)===0) {
     console.log("time being sought");
-    connection.send('T'+new Date().getTime());
+    connection.send('T'+new Date().getTime()+'Q');
   }
 });
 
