@@ -117,6 +117,9 @@ connection.onReadLine.addListener(function(line) {
   //  console.log("time being sought");
   //  connection.send('T1430342577');
   //}
+  if(jQuery.parseJSON(line)===2) {
+    connection.send("wait up"); // tell the connection to hold up
+  }
   console.log(line);
   logJSON(line);
   connection.flush();

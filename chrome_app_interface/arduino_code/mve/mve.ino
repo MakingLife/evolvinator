@@ -56,11 +56,12 @@
   
   void interface(){
     Serial.println("checking for user input");
+    Serial.println(2);
     //delay(1000);
   // this code handles interactivity from the interface, ergo Serial
     char s;
 //    if (Serial.available()) { // not working with current loop
-    while(!Serial.available()) { 
+    while(Serial.available()) { 
       // basically pauses the program until input received,returns 0 when no serial has been sent, not 0 = 1
     // however the above boolean will only work once, once any serial has been received it always evals to false
       s = Serial.read();
@@ -82,11 +83,11 @@
           case 'n':
             //do
             break;
-          /*default:
+          default:
             Serial.print("this is what i'm working wth here: ");
             Serial.println(s);
-            break; // without break the serial flushing seems a non issue    
-          */
+            // break; // without break the serial flushing seems a non issue    
+          
         }
         Serial.flush();
     } // end while
