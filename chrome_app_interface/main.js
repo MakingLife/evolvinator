@@ -131,7 +131,7 @@ connection.onReadLine.addListener(function(bell) {
   }
 });
 
-connection.connect(DEVICE_PATH);
+
 //connection.send('T'+new Date().getTime());
 
 function logJSON(status) {
@@ -157,6 +157,11 @@ function logJSON(status) {
 function log(msg) {
   $('#buffer').append(msg + '<br/>');
 }
+
+$('#connect').click(function() {
+  connection.connect(DEVICE_PATH);
+  // when received back the byte count behaves erratically
+});
 
 $('#start').click(function() {
   connection.send('y');
