@@ -52,7 +52,7 @@
   
   void interface(){
   // this code handles interactivity from the interface, ergo Serial
-    Serial.flush();
+    //Serial.flush();
     char c;
     if (Serial.available()) {
       c = Serial.read();
@@ -90,7 +90,7 @@
     Serial.println("syncing time");
     //timeSync();
      delay(1000);
-     Serial.flush();
+     //Serial.flush();
   } // end function
   
   
