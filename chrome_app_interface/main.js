@@ -115,6 +115,7 @@ connection.onReadLine.addListener(function(line) {
   // console.log("client received "+typeof(line)); // confirm that arduino is sending the expected string
   // above will always be a string because of function ab2str
   console.log("client received "+line);
+  console.log("time stamp = "+new Date());
   if(jQuery.parseJSON(line)===2) {
     // connection.send("wait up"); // tell the connection to hold up
   }

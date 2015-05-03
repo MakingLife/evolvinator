@@ -33,12 +33,13 @@
     setTime(8,29,0,2,5,15); 
     // (hr,min,sec,day,month,yr)
     // set time to some generic vals
-    pinMode(led, OUTPUT);  
+    pinMode(led, OUTPUT);
+    timeCheck(); 
   }
   
   // this code will be run data, main void loop()
   void loop() {
-    Serial.println("waiting");
+    // Serial.println("waiting");
     if(userInput){
       Serial.println("loop() begin");
       // If run has started
@@ -55,10 +56,11 @@
           oldMsODRead = currentMs; 
           // handles doing this once a minute without cause for external time reference
         }
-        digitalWrite(led, HIGH);          // open air valve ~ subsitute with a LED with attendant change on the logic
+        digitalWrite(led, HIGH);          // debug LED
         delay(10000);
         Serial.print("run concluded at: ");
         digitalClockDisplay();
+        digitalWrite(led, LOW); // turn off the LED
       }
       // in the other code there are measurements that will happen irrespective of a run having been started
       digitalClockDisplay();
@@ -138,7 +140,10 @@ void timeSync() {
           /* case 'd':
             dataRead();
             break; */
-          
+          default:
+            userInput = false;
+            Serial.println("sleeping the measurement apparatus");
+            digitalClockDisplay();
         }
     } // end while
 //    else {
