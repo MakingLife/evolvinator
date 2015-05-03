@@ -120,10 +120,6 @@ void timeSync() {
           case 'n':
             //do
             break;
-          default:
-            Serial.print("this is what i'm working wth here: ");
-            Serial.println(s);
-            // break; // without break the serial flushing seems a non issue    
           
         }
         Serial.flush();
