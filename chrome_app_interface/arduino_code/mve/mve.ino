@@ -17,7 +17,7 @@
   time_t t;                                 // current time
   time_t tElapsed;                          // elapsed time (s)  
   
-  boolean userInput = false;
+  boolean calibrated = false;
   boolean halt = false;
   
   // OD aka generic sensor
@@ -40,7 +40,7 @@
   // this code will be run data, main void loop()
   void loop() {
     // Serial.println("waiting");
-    if(userInput){
+    if(calibrated){
       Serial.println("loop() begin");
       // If run has started
       digitalWrite(led, LOW);
@@ -113,7 +113,7 @@ void timeSync() {
   // this code handles interactivity from the interface, ergo Serial
     char s;
 
-    while(Serial.available()) { 
+    while(Serial.available()) { // this was previously IF serial available
       // basically pauses the program until input received,returns 0 when no serial has been sent, not 0 = 1
     
       s = Serial.read();
@@ -122,7 +122,7 @@ void timeSync() {
 
           case 'y':
             // do
-            userInput = true;
+            calibrated = true;
             Serial.print("you have entered ");
             Serial.print(s);
             Serial.println(" this means you wish to start a run");
@@ -131,7 +131,7 @@ void timeSync() {
             break;
           case 'n':
             //do
-            userInput = true;
+            calibrated = true;
             Serial.print("you have entered ");
             Serial.print(s);
             Serial.println(" this means you wish to suspend measurements");
@@ -141,7 +141,7 @@ void timeSync() {
             dataRead();
             break; */
           default:
-            userInput = false;
+            calibrated = false;
             Serial.println("sleeping the measurement apparatus");
             digitalClockDisplay();
         }
