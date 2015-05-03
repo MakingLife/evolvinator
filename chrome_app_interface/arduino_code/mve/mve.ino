@@ -51,8 +51,7 @@
       // Check and adjust time if neccessary
     currentMs = millis();
     timeCheck();  // only time that a call to check external time is necessary
-    Serial.flush();
-    delay(1000);//
+    // delay(1000);// this superfluous if using delay within timecheck executions itself
     interface();
   }
   
@@ -63,8 +62,7 @@
       Serial.println(0);
       delay(1000);
       timeSync();
-      
-       //Serial.flush();
+
     } // end function
   
   
@@ -123,7 +121,6 @@ void timeSync() {
             break; */
           
         }
-        Serial.flush();
     } // end while
 //    else {
 //      return;

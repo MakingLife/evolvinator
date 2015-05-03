@@ -78,16 +78,17 @@ SerialConnection.prototype.send = function(msg) {
   if (this.connectionId < 0) {
     throw 'Invalid connection';
   }
+  serial.flush(this.connectionId, function() {});
   serial.send(this.connectionId, str2ab(msg), function() {});
   //chrome.serial.send(integer connectionId, ArrayBuffer data, function callback)
 };
 
-SerialConnection.prototype.flush = function(){
-  if (this.connectionId < 0) {
-    throw 'Invalid connection';
-  }
-  serial.flush(this.connectionId, function() {});
-}
+//SerialConnection.prototype.flush = function(){
+//  if (this.connectionId < 0) {
+//    throw 'Invalid connection';
+//  }
+//  serial.flush(this.connectionId, function() {});
+//}
 
 SerialConnection.prototype.disconnect = function() {
   if (this.connectionId < 0) {
