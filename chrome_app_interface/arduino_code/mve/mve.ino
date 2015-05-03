@@ -86,8 +86,8 @@
             break; // without break the serial flushing seems a non issue    
           */
         }  
-        
-    }
+        Serial.flush();
+    } // end while
 //    else {
 //      return;
 //    }
