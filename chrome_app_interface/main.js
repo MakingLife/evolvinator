@@ -112,15 +112,16 @@ connection.onConnect.addListener(function() {
 
 connection.onReadLine.addListener(function(line) {
   console.log(typeof(line)); // confirm that arduino is sending the expected string
+  console.log(line);
   // above will always be a string because of function ab2str
   //if(jQuery.parseJSON(line)===0) {
   //  console.log("time being sought");
   //  connection.send('T1430342577');
   //}
   if(jQuery.parseJSON(line)===2) {
-    connection.send("wait up"); // tell the connection to hold up
+    // connection.send("wait up"); // tell the connection to hold up
   }
-  console.log(line);
+  // console.log(line);
   logJSON(line);
   connection.flush();
 });
