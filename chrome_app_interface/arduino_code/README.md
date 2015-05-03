@@ -3,20 +3,21 @@ currently device will always sleep unless it receives a calibration char
 desried behaviour = continue running its thing
 
 ==code-flow==
-connect to device
 
-check if there is a run in progress
+    connect to device
 
-if yes
+    check if there is a run in progress
 
-  update sensor readings to be broadcast to client
+    if yes
 
-    return options = haltRun, or disconnect
+      update sensor readings to be broadcast to client
 
-      if haltRun
+        return options = haltRun, or disconnect
 
-        return calibrate
+          if haltRun
 
-if not
+            return calibrate
 
-  return options = calibrate, or startrun
+    if not
+
+      return options = calibrate, or startrun
