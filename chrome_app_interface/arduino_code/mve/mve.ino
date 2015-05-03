@@ -79,16 +79,24 @@
     // so what would be ideal here is some way of it knowing that a serial connection has been made to the chrome app - like a handshake
     Serial.println(0);
     //if (Serial.available()) {
-      //Serial.println("arduino attempt to set time"); // definitely detecting the transmission of serial
+        //Serial.println("arduino attempt to set time"); // definitely detecting the transmission of serial
+        timeSync();
+    //} // end first  if
+    delay(1000);
+  } // end function
+  
+  
+  void timeSync(){
         //while(Serial.available() >=  TIME_MSG_LEN ){
          while(Serial.available()){  // time message consists of a header and ten ascii digits
           char c = Serial.read() ; 
           Serial.print(c);  
-          if( c == TIME_HEADER ) {
-            Serial.println("time header logic functional as expected");       
+          //if( c == TIME_HEADER ) {
+            // Serial.println("time header logic functional as expected");       
             time_t pctime = 0;
-            for(int i=0; i < TIME_MSG_LEN -1; i++){   
-              c = Serial.read();          
+            for(int i=0; i < TIME_MSG_LEN -3; i++){   
+              c = Serial.read();
+              Serial.println(c);          
               if( c >= '0' && c <= '9'){   
                 pctime = (10 * pctime) + (c - '0') ; // convert digits to a number    
               } else if (c == TERM_FOOTER) {
@@ -97,12 +105,9 @@
             }   // end for
             setTime(pctime);   // Sync Arduino clock to the time received on the serial port
             return;
-          } // end if header
-         delay(3000); 
+          // } // end if header 
         } // end while
-    // } // end first  if
-    
-  } // end function
+  }
   
   void dataRead(){
     // a function to handle storing data
