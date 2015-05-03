@@ -98,7 +98,7 @@ void timeSync(){
 
 void processSyncMessage() {
   // if time sync available from serial port, update time and return true
-  while(Serial.available() >=  TIME_MSG_LEN ){  // time message consists of a header and ten ascii digits
+  while(Serial.available()){  // time message consists of a header and ten ascii digits
     char c = Serial.read() ; 
     Serial.print(c);  
     if( c == TIME_HEADER ) {       
@@ -119,6 +119,7 @@ void processSyncMessage() {
       Serial.print(hour(t));  
       Serial.print(minute(t));
       Serial.print(second(t));
+      return;
     }  
   }
 

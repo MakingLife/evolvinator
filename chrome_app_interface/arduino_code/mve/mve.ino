@@ -78,7 +78,7 @@
     // this code also has to call to the Serial
     // so what would be ideal here is some way of it knowing that a serial connection has been made to the chrome app - like a handshake
     Serial.println(0);
-    delay(50);
+    delay(1000);
     if (Serial.available()) {
       //Serial.println("arduino attempt to set time"); // definitely detecting the transmission of serial
         while(Serial.available()){  // time message consists of a header and ten ascii digits
