@@ -1,8 +1,12 @@
+the following describes mve.ino
+
 connecting to device prompts the device to get updated time and then sleep
+
 currently device will always sleep unless it receives a calibration char
+
 desried behaviour = continue running its thing
 
-==code-flow==
+===code flow===
 
     connect to device
 
