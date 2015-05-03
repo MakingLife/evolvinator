@@ -47,6 +47,8 @@
       // Check and adjust time if neccessary
     currentMs = millis();
     timeCheck();  // only time that a call to check external time is necessary
+    Serial.flush();
+    // delay(1000);
     interface();
   }
   
@@ -88,7 +90,7 @@
     // so what would be ideal here is some way of it knowing that a serial connection has been made to the chrome app - like a handshake
     Serial.println(0);
     Serial.println("syncing time");
-    //timeSync();
+    timeSync();
      delay(1000);
      //Serial.flush();
   } // end function
