@@ -30,7 +30,7 @@
   
   // this code will be run data, main void loop()
   void loop() {
-    Serial.println("begin");
+    Serial.println("loop() begin");
     // If run has started
     digitalWrite(pinValve, LOW);
     if (tStart) {
@@ -54,8 +54,44 @@
     interface();
   }
   
+    void timeCheck(){
+      Serial.println("timeCheck(): syncing time");
+      // this code also has to call to the Serial
+      // so what would be ideal here is some way of it knowing that a serial connection has been made to the chrome app - like a handshake
+      Serial.println(0);
+      timeSync();
+      delay(1000);
+       //Serial.flush();
+    } // end function
+  
+  
+void timeSync() {
+  // if time sync available from serial port, update time and return true
+  // while(Serial.available()){  
+  while(Serial.available()){  
+    // this while is not executing
+    // time message consists of a header and ten ascii digits
+    Serial.println("timeSync(): time sync go");
+    char c = Serial.read() ; 
+    // Serial.print(c);  
+    if( c == TIME_HEADER ) { // this never executes       
+      time_t pctime = 0;
+      for(int i=0; i < TIME_MSG_LEN -1; i++){   
+        c = Serial.read();          
+        if( c >= '0' && c <= '9'){   
+          pctime = (10 * pctime) + (c - '0') ; // convert digits to a number    
+        }
+      }   // end for
+      setTime(pctime);   // Sync Arduino clock to the time received on the serial port
+      Serial.println("timeSync(): time sync go");
+      return;
+    } // end if 
+  } // end while
+
+}
+  
   void interface(){
-    Serial.println("checking for user input");
+    Serial.println("interface(): checking for user input");
     Serial.println(2);
     //delay(1000);
   // this code handles interactivity from the interface, ergo Serial
@@ -97,39 +133,7 @@
     //Serial.flush();
   }
   
-  void timeCheck(){
-    // this code also has to call to the Serial
-    // so what would be ideal here is some way of it knowing that a serial connection has been made to the chrome app - like a handshake
-    Serial.println(0);
-    Serial.println("syncing time");
-    timeSync();
-    delay(1000);
-     //Serial.flush();
-  } // end function
-  
-  
-void timeSync() {
-  // if time sync available from serial port, update time and return true
-  // while(Serial.available()){  
-  while(Serial.available() >=  TIME_MSG_LEN ){  // time message consists of a header and ten ascii digits
-    
-    char c = Serial.read() ; 
-    // Serial.print(c);  
-    if( c == TIME_HEADER ) { // this never executes       
-      time_t pctime = 0;
-      for(int i=0; i < TIME_MSG_LEN -1; i++){   
-        c = Serial.read();          
-        if( c >= '0' && c <= '9'){   
-          pctime = (10 * pctime) + (c - '0') ; // convert digits to a number    
-        }
-      }   
-      setTime(pctime);   // Sync Arduino clock to the time received on the serial port
-      Serial.println("time sync go");
-      return;
-    }  
-  }
 
-}
   
   void dataRead(){
     // a function to handle storing data
