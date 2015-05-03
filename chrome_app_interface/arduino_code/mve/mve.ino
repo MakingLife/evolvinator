@@ -1,6 +1,7 @@
 // the minimum viable evolvinator
 
 // git commit 184f922bb0e4cc597c0a4f63db7d0265ef9d75b7 contains a version where time sync occurs and the interface command will reach the controller
+// consult git commit 9338f23f393e3355f71d7419548a1e894f954e41 for a main.js and mve.ino that play well together
 
   #include <Time.h>
   #define TIME_MSG_LEN  11   // time sync to PC is HEADER followed by unix time_t as ten ascii digits
@@ -15,6 +16,8 @@
   time_t tStart;                            // starting time
   time_t t;                                 // current time
   time_t tElapsed;                          // elapsed time (s)  
+  
+  boolean userInput = false;
   
   // OD aka generic sensor
   unsigned long oldMsODRead = 0;
@@ -36,7 +39,7 @@
     // If run has started
     digitalWrite(pinValve, LOW);
     if (tStart) {
-      
+      Serial.println("measure me some sensors");
       // take a sensor measurement
       currentMs = millis();
       if (currentMs - oldMsODRead > 60000) {
@@ -52,11 +55,10 @@
     currentMs = millis();
     timeCheck();  // only time that a call to check external time is necessary
     // delay(1000);// this superfluous if using delay within timecheck executions itself
-    interface();
+    // interface();
   }
   
     void timeCheck(){
-      Serial.println("timeCheck(): syncing time");
       // this code also has to call to the Serial
       // so what would be ideal here is some way of it knowing that a serial connection has been made to the chrome app - like a handshake
       Serial.println(0);
@@ -73,7 +75,6 @@ void timeSync() {
   while(Serial.available() >=  TIME_MSG_LEN ){  // time message consists of a header and ten ascii digits  
     // this while is not executing
     // time message consists of a header and ten ascii digits
-    Serial.println("timeSync(): time sync go");
     char c = Serial.read() ; 
     // Serial.print(c);  
     if( c == TIME_HEADER ) { // this never executes       
@@ -85,23 +86,22 @@ void timeSync() {
         }
       }   // end for
       setTime(pctime);   // Sync Arduino clock to the time received on the serial port
-      Serial.println("timeSync(): time sync end");
       return;
     } // end if 
   } // end while
 
 }
   
-  void interface(){
-    Serial.println("interface(): checking for user input");
+  // void interface(){
+  void serialEvent() {
     Serial.println(2);
     //delay(1000);
   // this code handles interactivity from the interface, ergo Serial
     char s;
-//    if (Serial.available()) { // not working with current loop
+
     while(Serial.available()) { 
       // basically pauses the program until input received,returns 0 when no serial has been sent, not 0 = 1
-    // however the above boolean will only work once, once any serial has been received it always evals to false
+    
       s = Serial.read();
       
       switch (s) {
@@ -135,8 +135,6 @@ void timeSync() {
    
   void startRun() {
     tStart = now();
-//    Serial.print("tStart time = ");
-//    Serial.println(tStart);
     Serial.print("run commenced at: ");
     digitalClockDisplay();
     tElapsed = 0;
