@@ -38,33 +38,36 @@
   
   // this code will be run data, main void loop()
   void loop() {
-    Serial.println("loop() begin");
-    // If run has started
-    digitalWrite(led, LOW);
-    if (tStart && !halt) {
-      Serial.println("measure me some sensors");
-      Serial.print("run commenced at: ");
-      digitalClockDisplay();
-      // take a sensor measurement
-      currentMs = millis();
-      if (currentMs - oldMsODRead > 60000) {
-        SensorRead(); 
-        // call to a sensorRead function which should mimic the data logging call
-        oldMsODRead = currentMs; 
-        // handles doing this once a minute without cause for external time reference
+    Serial.println("waiting");
+    if(userInput){
+      Serial.println("loop() begin");
+      // If run has started
+      digitalWrite(led, LOW);
+      if (tStart && !halt) {
+        Serial.println("measure me some sensors");
+        Serial.print("run commenced at: ");
+        digitalClockDisplay();
+        // take a sensor measurement
+        currentMs = millis();
+        if (currentMs - oldMsODRead > 60000) {
+          SensorRead(); 
+          // call to a sensorRead function which should mimic the data logging call
+          oldMsODRead = currentMs; 
+          // handles doing this once a minute without cause for external time reference
+        }
+        digitalWrite(led, HIGH);          // open air valve ~ subsitute with a LED with attendant change on the logic
+        delay(10000);
+        Serial.print("run concluded at: ");
+        digitalClockDisplay();
       }
-      digitalWrite(led, HIGH);          // open air valve ~ subsitute with a LED with attendant change on the logic
-      delay(10000);
-      Serial.print("run concluded at: ");
+      // in the other code there are measurements that will happen irrespective of a run having been started
       digitalClockDisplay();
+        // Check and adjust time if neccessary
+      currentMs = millis();
+      timeCheck();  // only time that a call to check external time is necessary
+      // delay(1000);// this superfluous if using delay within timecheck executions itself
+      // interface();
     }
-    // in the other code there are measurements that will happen irrespective of a run having been started
-    digitalClockDisplay();
-      // Check and adjust time if neccessary
-    currentMs = millis();
-    timeCheck();  // only time that a call to check external time is necessary
-    // delay(1000);// this superfluous if using delay within timecheck executions itself
-    // interface();
   }
   
     void timeCheck(){
@@ -117,6 +120,7 @@ void timeSync() {
 
           case 'y':
             // do
+            userInput = true;
             Serial.print("you have entered ");
             Serial.print(s);
             Serial.println(" this means you wish to start a run");
@@ -125,6 +129,7 @@ void timeSync() {
             break;
           case 'n':
             //do
+            userInput = true;
             Serial.print("you have entered ");
             Serial.print(s);
             Serial.println(" this means you wish to suspend measurements");
