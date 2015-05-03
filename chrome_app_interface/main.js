@@ -151,7 +151,8 @@ var is_on = false;
 $('#toggle').click(function() {
 
   is_on = !is_on;
-  connection.send(is_on ? 'y' : 'n');
+  //connection.send(is_on ? 'y' : 'n');
+  connection.send('y');
 
   // 'T1430342577'
 });

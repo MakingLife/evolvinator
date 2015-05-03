@@ -54,10 +54,13 @@
   
   void interface(){
     Serial.println("checking for user input");
+    Serial.flush();
+    delay(1000);
   // this code handles interactivity from the interface, ergo Serial
-    //Serial.flush();
+
     char s;
-    if (Serial.available()) {
+//    if (Serial.available()) { // not working with current loop
+    while(!Serial.available()) { // basically pauses the program until input received
       s = Serial.read();
       
               /* the two cases we are interested in presently are 
@@ -85,9 +88,9 @@
         }  
         
     }
-    else {
-      return;
-    }
+//    else {
+//      return;
+//    }
     //Serial.flush();
   }
   
