@@ -112,12 +112,8 @@ connection.onConnect.addListener(function() {
 
 connection.onReadLine.addListener(function(line) {
   // console.log("client received "+typeof(line)); // confirm that arduino is sending the expected string
-  console.log("client received "+line);
   // above will always be a string because of function ab2str
-  //if(jQuery.parseJSON(line)===0) {
-  //  console.log("time being sought");
-  //  connection.send('T1430342577');
-  //}
+  console.log("client received "+line);
   if(jQuery.parseJSON(line)===2) {
     // connection.send("wait up"); // tell the connection to hold up
   }
@@ -164,8 +160,8 @@ var is_on = false;
 $('#toggle').click(function() {
 
   is_on = !is_on;
-  //connection.send(is_on ? 'y' : 'n');
-  connection.send('y');
+  connection.send(is_on ? 'y' : 'n');
+  //connection.send('y');
 
   // 'T1430342577'
 });

@@ -1,5 +1,7 @@
 // the minimum viable evolvinator
 
+// git commit 184f922bb0e4cc597c0a4f63db7d0265ef9d75b7 contains a version where time sync occurs and the interface command will reach the controller
+
   #include <Time.h>
   #define TIME_MSG_LEN  11   // time sync to PC is HEADER followed by unix time_t as ten ascii digits
   #define TIME_HEADER  'T'   // Header tag for serial time sync message
@@ -68,8 +70,9 @@
   
 void timeSync() {
   // if time sync available from serial port, update time and return true
-  // while(Serial.available()){  
-  while(Serial.available()){  
+
+  // while(Serial.available()){
+  while(Serial.available() >=  TIME_MSG_LEN ){  // time message consists of a header and ten ascii digits  
     // this while is not executing
     // time message consists of a header and ten ascii digits
     Serial.println("timeSync(): time sync go");
@@ -84,7 +87,7 @@ void timeSync() {
         }
       }   // end for
       setTime(pctime);   // Sync Arduino clock to the time received on the serial port
-      Serial.println("timeSync(): time sync go");
+      Serial.println("timeSync(): time sync end");
       return;
     } // end if 
   } // end while
@@ -103,11 +106,6 @@ void timeSync() {
     // however the above boolean will only work once, once any serial has been received it always evals to false
       s = Serial.read();
       
-              /* the two cases we are interested in presently are 
-        startRun();
-        dataRead(); // download data
-        */
-      
       switch (s) {
 
           case 'y':
@@ -120,6 +118,9 @@ void timeSync() {
           case 'n':
             //do
             break;
+          /* case 'd':
+            dataRead();
+            break; */
           
         }
         Serial.flush();
@@ -127,7 +128,6 @@ void timeSync() {
 //    else {
 //      return;
 //    }
-    //Serial.flush();
   }
   
 
@@ -138,14 +138,18 @@ void timeSync() {
    
   void startRun() {
     tStart = now();
-    Serial.print("tStart time = ");
-    Serial.println(tStart);
+//    Serial.print("tStart time = ");
+//    Serial.println(tStart);
+    Serial.print("run commenced at: ");
+    digitalClockDisplay();
     tElapsed = 0;
     tUnixStart += (millis() - msElapsedPrestart) / 1000;    // to adjust unix time
     tUnix = tUnixStart + tElapsed;
     // SDInitialize();
     digitalWrite(pinValve, HIGH);          // open air valve ~ subsitute with a LED with attendant change on the logic
     delay(10000);
+    Serial.print("run concluded at: ");
+    digitalClockDisplay();
   }
   
   void SensorRead(){
