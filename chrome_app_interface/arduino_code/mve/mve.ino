@@ -24,7 +24,7 @@
   boolean debugMode = true;
   boolean calibrated = false;
   boolean userInput = false;
-  boolean halt = false;
+
   
   // OD aka generic sensor
   unsigned long oldMsODRead = 0;
@@ -49,7 +49,7 @@
       Serial.println(calibrated); // true broadcasts as 1 over serial, not so useful
       // If run has started
       digitalWrite(led, LOW);
-      if (tStart && !halt) {
+      if (tStart) {
         Serial.println("measure me some sensors");
         Serial.print("run commenced at: ");
         digitalClockDisplay();
@@ -163,7 +163,7 @@ void timeCheck() {
             Serial.print("you have entered ");
             Serial.print(s);
             Serial.println(" this means you wish to start a run");
-            halt = false;
+
             startRun();
             break;
           case 'n':
@@ -172,7 +172,7 @@ void timeCheck() {
             Serial.print("you have entered ");
             Serial.print(s);
             Serial.println(" this means you wish to suspend measurements");
-            halt = true;
+
             break;
           /* case 'd':
             dataRead();
