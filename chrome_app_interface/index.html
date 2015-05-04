@@ -1,9 +1,60 @@
-<button style="position: absolute; bottom: 0">Toggle Led</button>
+<!--<button id="toggle" style="position: absolute; bottom: 0">Toggle Led</button>-->
+<table>
+  <tr>
+    <td><button id="connect">connect</button></td>
+    <td><button id="disconnect">disconnect</button></td>
+  </tr>
+</table>
 
-<svg height="100" width="100">
-  <circle  id="statusCircle"  cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="grey" />
-</svg>
+<!--<svg height="100" width="100">-->
+  <!--<circle  id="statusCircle"  cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="grey" />-->
+<!--</svg>-->
+<form method=post action="/?d"> <!-- should pass case d to switch -->
+  <input type=submit value="Download Data">
+</form>
+<button id="calibrate">Calibrate</button><br>
+<!--fieldSubmitButton-->
+<div id="calibration" style="display: none">
+  <form method=get action="/?">Change OD Threshold:
+    <input type=txt name="o">
+    <input type=submit value="Submit">
+  </form>
+  <!--fieldSubmitButton-->
 
+  <form method=get action="/?">Change Max Flowrate (ml/h):
+    <input type=txt name="f">
+    <input type=submit value="Submit">
+  </form>
+  <!--fieldSubmitButton-->
+
+  <form method=get action="/?">Change Temperature:
+    <input type=txt name="t">
+    <input type=submit value="Submit">
+  </form>
+  <!--submit button-->
+  <form method=post action="/?z">
+    <input type=submit value="Zero OD Sensor">
+  </form>
+
+  <!--fieldSubmitButton-->
+  <form method=get action="/?">Add Media (ml):
+    <input type=txt name="a">
+    <input type=submit value="Submit">
+  </form>
+
+  <br>
+  <form method=post action="/?i">
+    <input type=submit value="Toggle Debug Mode">
+  </form>
+
+</div>
+<button id="start">Start Run</button>
+
+
+  <!--<button id="start">Start Run</button><br>-->
+  <!--<button id="halt">Halt Run</button><br>-->
+  <!--<button id="time">Calibrate</button><br>-->
+  <!--<button id="verbose">Disconnect</button><br>-->
 <div id="buffer">
 
 </div>

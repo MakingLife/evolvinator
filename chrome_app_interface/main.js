@@ -1,6 +1,6 @@
 // Serial used from your Arduino board
 // const DEVICE_PATH = 'COM11'; // PC
-const DEVICE_PATH = '/dev/ttyACM1'; //MAC
+const DEVICE_PATH = '/dev/ttyACM0'; //MAC
 const serial = chrome.serial;
 
 /* Interprets an ArrayBuffer as UTF-8 encoded string data. */
@@ -13,6 +13,7 @@ var ab2str = function(buf) {
 /* Converts a string to UTF-8 encoding in a Uint8Array; returns the array buffer. */
 var str2ab = function(str) {
   var encodedString = unescape(encodeURIComponent(str));
+  console.log("str2ab string = "+encodedString);
   var bytes = new Uint8Array(encodedString.length);
   for (var i = 0; i < encodedString.length; ++i) {
     bytes[i] = encodedString.charCodeAt(i);
@@ -61,7 +62,9 @@ SerialConnection.prototype.onReceive = function(receiveInfo) {
 };
 
 SerialConnection.prototype.onReceiveError = function(errorInfo) {
+
   if (errorInfo.connectionId === this.connectionId) {
+    console.log("connection error detected");
     this.onError.dispatch(errorInfo.error);
   }
 };
@@ -71,17 +74,30 @@ SerialConnection.prototype.connect = function(path) {
 };
 
 SerialConnection.prototype.send = function(msg) {
+  console.log('passing the message "'+msg+'" to the array buffer conversion function');
   if (this.connectionId < 0) {
     throw 'Invalid connection';
   }
+  // serial.flush(this.connectionId, function() {});
   serial.send(this.connectionId, str2ab(msg), function() {});
+  //chrome.serial.send(integer connectionId, ArrayBuffer data, function callback)
 };
+
+//SerialConnection.prototype.flush = function(){
+//  if (this.connectionId < 0) {
+//    throw 'Invalid connection';
+//  }
+//  serial.flush(this.connectionId, function() {});
+//}
 
 SerialConnection.prototype.disconnect = function() {
   if (this.connectionId < 0) {
     throw 'Invalid connection';
   }
+  serial.flush(this.connectionId, function() {});
   serial.disconnect(this.connectionId, function() {});
+  console.log("successful disconnect");
+  log("successful disconnect");
 };
 
 ////////////////////////////////////////////////////////
@@ -90,23 +106,42 @@ SerialConnection.prototype.disconnect = function() {
 var connection = new SerialConnection();
 
 connection.onConnect.addListener(function() {
+
   log('connected to: ' + DEVICE_PATH);
-  connection.send("hello arduino");
+
 });
 
 connection.onReadLine.addListener(function(line) {
-  console.log(line); // confirm that arduino is sending the expected string
+  // console.log("client received "+typeof(line)); // confirm that arduino is sending the expected string
+  // above will always be a string because of function ab2str
+  console.log("client received "+line);
+  console.log("time stamp = "+new Date());
+  if(jQuery.parseJSON(line)===2) {
+    // connection.send("wait up"); // tell the connection to hold up
+  }
+  // console.log(line);
   logJSON(line);
+  connection.flush();
+});
+connection.onReadLine.addListener(function(bell) {
+  if(jQuery.parseJSON(bell)===0) {
+    console.log("time being sought");
+    connection.send('T'+new Date().getTime());
+    connection.flush();
+  }
 });
 
-connection.connect(DEVICE_PATH);
 
-function logJSON(ledstatus) {
+//connection.send('T'+new Date().getTime());
+
+function logJSON(status) {
+  // console.log("led status function being called");
 
   // Get the LED status from the Json returned by the Serial
   // 0 = off | 1 = on
-  ledstatus = jQuery.parseJSON( ledstatus ).ledStatus ;
-  console.log(ledstatus);
+  // console.log((jQuery.parseJSON(status)));
+  ledstatus = jQuery.parseJSON( status ).ledStatus ;
+  // console.log(status);
   // Set the circle color according with the LED status
   if (ledstatus == 0)
      $('#statusCircle').css('fill','red');
@@ -123,10 +158,45 @@ function log(msg) {
   $('#buffer').append(msg + '<br/>');
 }
 
+$('#connect').click(function() {
+  connection.connect(DEVICE_PATH);
+  // when received back the byte count behaves erratically
+});
+
+$('#disconnect').click(function() {
+  connection.disconnect();
+});
+
+$('#calibrate').click(function() {
+  $('#calibration').toggle();
+  connection.send(''); // above behaviour appears to be a flaw of sending numbers via a UTF8 buffer
+});
+
+
+$('#start').click(function() {
+  connection.send('y');
+  // when received back the byte count behaves erratically
+});
+
+$('#halt').click(function() {
+  connection.send('n');
+  // when received back the byte count behaves erratically
+});
+
+$('#time').click(function() {
+  connection.send('T1430342577');
+  // when received back the byte count behaves erratically
+});
+
+
 var is_on = false;
-$('button').click(function() {
+$('#toggle').click(function() {
 
   is_on = !is_on;
   connection.send(is_on ? 'y' : 'n');
+  //connection.send('y');
+
+  // 'T1430342577'
 });
+
 

@@ -1,7 +1,4 @@
-This is a fork of Fabio Biondi's instructive tutorial on doing basic two way communication between a Chrome App and an arduino
-
-<a target="_blank" href="https://chrome.google.com/webstore/detail/bdiclhdalonemjdeeaglackjgdboboem">![Try it now in CWS](https://raw.github.com/GoogleChrome/chrome-app-samples/master/tryitnowbutton.png "Click here to install this sample from the Chrome Web Store")</a>
-
+This is a fork of <a target="_blank" href="https://chrome.google.com/webstore/detail/bdiclhdalonemjdeeaglackjgdboboem">Fabio Biondi's instructive tutorial</a> on doing basic two way communication between a Chrome App and an arduino
 
 # Arduino LED toggle
 
