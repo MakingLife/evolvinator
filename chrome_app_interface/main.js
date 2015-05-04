@@ -168,6 +168,7 @@ $('#disconnect').click(function() {
 });
 
 $('#calibrate').click(function() {
+  $('#calibration').toggle();
   connection.send(''); // above behaviour appears to be a flaw of sending numbers via a UTF8 buffer
 });
 

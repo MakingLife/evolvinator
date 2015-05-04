@@ -43,7 +43,7 @@
     // Serial.println("waiting");
     if(calibrated || userInput){
       Serial.println("loop() begin");
-      Serial.println(calibrated);
+      Serial.println(calibrated); // true broadcasts as 1 over serial, not so useful
       // If run has started
       digitalWrite(led, LOW);
       if (tStart && !halt) {
