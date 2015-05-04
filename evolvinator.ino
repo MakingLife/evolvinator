@@ -130,11 +130,8 @@ void setup() {
   tempPID.SetOutputLimits(0, 70);
 
   // Timer
-  Udp.begin(localPort);
-  // BREAK below is the point at which the code will break in absence of an ethernet cable
-  //setSyncProvider(getTime);                 // sync interval default is 5 mins 
+  setTime(15,29,0,4,5,15); // (hr,min,sec,day,month,yr)
   setSyncInterval(60 * 5);
-  tUnixStart = tUnix; 
   tBackup = now();                          // set back up time
   msBackup = millis();                      // set assocated backup time on Arduino's internal clock
   msElapsedPrestart = millis();             // ms passed since power on to calculate unix time.
