@@ -165,7 +165,9 @@ void loop() {
   // Check for web requests
   // webLoop(); 
   // currently this loop makes no call to the startRun() function, which is the one doing the main work
-  startRun();
+  if (!tStart) {
+    startRun();
+  }
 }
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Functions - List function calls below <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
