@@ -1,5 +1,7 @@
 A trimmed down version of the evolvinator, currently sized at 22184 btyes so will fit on an Uno
 
+Download this zip and open the file evolvinator.ino with the arduino IDE.
+
 The ethernet functionality is removed, timekeeping by the arduino is done by manually entering the time via a 
 
 	setTime(hr,min,sec,day,month,yr) 
