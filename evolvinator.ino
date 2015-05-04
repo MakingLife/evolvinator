@@ -59,7 +59,7 @@ const byte pinValve = 3;                  // pin that controls the valve
 float ODDesired = 0.5;                    // Set desired OD
 float ODMin[10];                          // stores recent OD measurements (current = ODMin[0]                         
 float OD3MinAvg;
-float ODZero = 0;                         // photodiode blank reading 
+float ODZero = 0;                         // photodiode blank reading CALIBRATION
 
 // Temp - temp is temperature of sensor (metal) unless otherwise indicated
 const byte pinTempRead = A0;              // analog input will read variable voltage from AD22100
