@@ -1,6 +1,6 @@
 // Serial used from your Arduino board
 // const DEVICE_PATH = 'COM11'; // PC
-const DEVICE_PATH = '/dev/ttyACM0'; //MAC
+const DEVICE_PATH = '/dev/ttyACM2'; //MAC
 const serial = chrome.serial;
 
 /* Interprets an ArrayBuffer as UTF-8 encoded string data. */
@@ -36,7 +36,7 @@ var SerialConnection = function() {
 
 SerialConnection.prototype.onConnectComplete = function(connectionInfo) {
   if (!connectionInfo) {
-    log("Connection failed.");
+    log("Connection failed. Check serial ports and hardcoded DEVICE_PATH variable");
     return;
   }
   this.connectionId = connectionInfo.connectionId;
