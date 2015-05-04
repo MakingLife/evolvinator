@@ -120,26 +120,3 @@ void SDWebLoad(EthernetClient client) {
   dataFile.close();
 }
 
-void SDWebLoadLIMS(EthernetClient client, char *timeStamp) {
-  // Header
-  char d[32];                                // buffer
-  client.println("HTTP/1.1 200 OK");
-  client.println("Content-Type: text");        // designate to print txt
-  client.println("Content-Disposition: attachment; filename=data.csv");    // download to file
-  client.print("\n");
-  dataFile = SD.open("data.csv");
-  dataFile.seek(0);
-  if (dataFile.find(timeStamp)) {
-    client.print(timeStamp);
-    while (dataFile.available()) {
-      dataFile.readBytes(d, 31);
-      d[31] = 0;
-      client.print(d);
-    }
-  }
-  else {
-    client.println("could not find timestamp");
-  }
-  dataFile.seek(0);
-  dataFile.close();
-}

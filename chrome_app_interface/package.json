@@ -1,9 +1,0 @@
-{
-  "name": "chrome_app_interface",
-  "version": "0.0.1",
-  "dependencies": {
-    "express": "~3.1.0",
-    "path": "~0.4.9",
-    "body-parser": "~1.9.1"
-  }
-}
