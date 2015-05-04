@@ -25,18 +25,14 @@ Evolvinator
 #include <PID_v1.h>
 // ^~> utilised "A PID controller calculates an 'error' value as the difference between a measured [Input] and a desired setpoint" http://playground.arduino.cc/Code/PIDLibrary
 
+// Serial Time Constants
+
+ #define TIME_MSG_LEN  11   // time sync to PC is HEADER followed by unix time_t as ten ascii digits
+ #define TIME_HEADER  'T'   // Header tag for serial time sync message
+ #define TERM_FOOTER 'Q'
 
 // Ethernet  
-byte mac[] = { 
-  0x90, 0xA2, 0xDA, 0x00, 0x4F, 0x74 };   // ENTER MAC address of ethernet shield
-IPAddress ip(192, 168, 100, 52);          // ENTER IP address 
-/*byte mac[] = { 
- 0x90, 0xA2, 0xDA, 0x00, 0x59, 0x5E };    
- byte ip[] = { 
- 192, 168, 100, 53 };*/
-// static ip address to connect to
-EthernetServer server(80);                // default web request server
-EthernetUDP Udp;
+ // server deprecated for quickstart
 
 // Time
 unsigned long currentMs;
@@ -44,12 +40,6 @@ unsigned long oldMsTempRead = 0;
 unsigned long oldMsTempCheck = 0;
 unsigned long oldMsODRead = 0;
 unsigned long oldMsPulseFed = 0;         
-
-const int localPort = 8888;               // local port to listen for UDP packets
-byte timeServer[] = { 
-  192, 43, 244, 18};                      // time.nist.gov NTP server
-const int NTP_PACKET_SIZE= 48;            // NTP time stamp is in the first 48 bytes of the message
-byte packetBuffer[ NTP_PACKET_SIZE];      // buffer to hold incoming and outgoing packets from NTP
 
 time_t epoch; // only other reference to epoch is within Evo_Time and it is retrieved via the server
 
@@ -74,7 +64,7 @@ const byte pinValve = 3;                  // pin that controls the valve
 float ODDesired = 0.5;                    // Set desired OD
 float ODMin[10];                          // stores recent OD measurements (current = ODMin[0]                         
 float OD3MinAvg;
-float ODZero = 0;                         // photodiode blank reading 
+float ODZero = 0;                         // photodiode blank reading CALIBRATION
 
 // Temp - temp is temperature of sensor (metal) unless otherwise indicated
 const byte pinTempRead = A0;              // analog input will read variable voltage from AD22100
@@ -91,7 +81,10 @@ const byte pinUVLED = 2;                  // pin that powers the UV LED
 
 // Modes
 boolean debugMode = true;
-boolean calibrationMode = false;
+boolean calibrated = false;
+boolean userInput = false;
+
+int led = 13;
 
 // SD
 // const int pinSD = 4;
@@ -105,8 +98,7 @@ void setup() {
   // Serial, Ethernet
   Serial.begin(9600);
   pinMode(53, OUTPUT);                      // SS pin on Mega
-  Ethernet.begin(mac, ip);
-  server.begin();                            // start server EtherNetServer library Functionality
+
   delay(1);                                 // give it a msecond to connect
 
   // Pump Control
@@ -130,15 +122,12 @@ void setup() {
   tempPID.SetOutputLimits(0, 70);
 
   // Timer
-  Udp.begin(localPort); // EthernetUDP library functionality
-  // BREAK below is the point at which the code will break in absence of an ethernet cable
-  setSyncProvider(getTime);    // function which sets tUnix and epoch, but only returns epoch. However both vars are global             
-  // sync interval default is 5 mins 
-  setSyncInterval(60 * 5);                    // Time.h functionality: Set the number of seconds between re-sync - this function keeps everything on time
-  tUnixStart = tUnix;                       // Time.h variable common to local and Evo_Time
-  tBackup = now();                          // set back up time, Time.h NOT Evo_Time
-  msBackup = millis();                      // set assocated backup time on Arduino's internal clock, Time.h NOT Evo_Time
-  msElapsedPrestart = millis();             // ms passed since power on to calculate unix time, Time.h NOT Evo_Time
+  //timeInit(); // MVE function
+  setTime(15,29,0,4,5,15); // (hr,min,sec,day,month,yr) CALIBRATION
+  setSyncInterval(60 * 5);
+  tBackup = now();                          // set back up time
+  msBackup = millis();                      // set assocated backup time on Arduino's internal clock
+  msElapsedPrestart = millis();             // ms passed since power on to calculate unix time.
   if (debugMode) {
     Serial.print("Main Script ~ Back up time: ");
     Serial.println(tBackup);
@@ -153,40 +142,93 @@ void setup() {
 void loop() {
 
   // If run has started
-  if (tStart) {
-    // Take OD measurement ever minute, not dependant on Evo_Time
-    currentMs = millis();
-    if (currentMs - oldMsODRead > 60000) {
-      ODRead(); // call to Evo_OD
-      oldMsODRead = currentMs;
-    }
-
-    // Feed pulse if threshold is reached and it's been long enough
-    currentMs = millis();
-    if (OD3MinAvg > ODDesired && currentMs - oldMsPulseFed > feedFrequency) {
-      pulseFeed(); // call to Evo_Flow
-      oldMsPulseFed = currentMs;
-    }
-  }
-
-  // Check temp every 5 seconds
-  currentMs = millis();                    
-  if (currentMs - oldMsTempRead > 5000) {  
-    tempRead(); // call to Evo_Temp
-    oldMsTempRead = currentMs;
-  }
-  // PID adjust every 10 seconds
-  tempWrite(); // where the 10 seconds delay???
-
-  // Check and adjust time if neccessary
-  currentMs = millis();
-  timeCheck();  // call to EvoTime, uses tStart variable from THIS file
+  if(calibrated || userInput){
+    Serial.println("loop() begin");
+    Serial.println(calibrated); // true broadcasts as 1 over serial, not so useful
+      // If run has started
+    digitalWrite(led, LOW);
+    if (tStart) {
+      // Take OD measurement ever minute
+      currentMs = millis();
+      if (currentMs - oldMsODRead > 60000) {
+        ODRead(); // call to Evo_OD
+        oldMsODRead = currentMs;
+      }
   
-  // Check for web requests
-  webLoop(); 
-  // currently this loop makes no call to the startRun() function, which is the one doing the main work
-  // startRun();
+      // Feed pulse if threshold is reached and it's been long enough
+      currentMs = millis();
+      if (OD3MinAvg > ODDesired && currentMs - oldMsPulseFed > feedFrequency) {
+        pulseFeed(); // call to Evo_Flow
+        oldMsPulseFed = currentMs;
+      }
+    }
+  
+    // Check temp every 5 seconds
+    currentMs = millis();                    
+    if (currentMs - oldMsTempRead > 5000) {  
+      tempRead(); // call to Evo_Temp
+      oldMsTempRead = currentMs;
+    }
+    // PID adjust every 10 seconds
+    tempWrite(); 
+  
+    // Check and adjust time if neccessary
+    currentMs = millis();
+    timeCheck();  // call to EvoTime
+    
+    // Check for web requests
+    // webLoop(); 
+    // currently this loop makes no call to the startRun() function, which is the one doing the main work
+    // if (!tStart) {
+    //   startRun();
+    // }
+  } else {
+    // Serial.println("awaiting signal");
+  }
 }
+
+void serialEvent() {
+    //delay(1000);
+  // this code handles interactivity from the interface, ergo Serial
+    char s;
+
+    while(Serial.available()) { // this was previously IF serial available
+      // basically pauses the program until input received,returns 0 when no serial has been sent, not 0 = 1
+    
+      s = Serial.read();
+      
+      switch (s) {
+
+          case 'y':
+            // do
+            startRun();
+            userInput = true;
+            calibrated = true;
+            Serial.print("you have entered ");
+            Serial.print(s);
+            Serial.println(" this means you wish to start a run");
+            break;
+          case 'n':
+            //do
+            userInput = true;
+            Serial.print("you have entered ");
+            Serial.print(s);
+            Serial.println(" this means you wish to suspend measurements");
+
+            break;
+          /* case 'd':
+            dataRead();
+            break; */
+          default:
+            userInput = false;
+            Serial.println("sleeping the measurement apparatus");
+            digitalClockDisplay();
+        }
+    } // end while
+//    else {
+//      return;
+//    }
+  }
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Functions - List function calls below <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
  0 Start Run

@@ -64,10 +64,15 @@ float ODRead() {
   ODCount += 1; 
   // SDDataLog('o', ODCount, 0);                     // save data point to SD card
 
-  if (debugMode) Serial.println(ODMin[0]);
+  if (debugMode){
+    Serial.print("current OD measure count: ");
+    Serial.print(ODCount);
+    Serial.print(", most recent OD measurement: ");
+    Serial.println(ODMin[0]);
+  } 
 
   return ODMin[0], OD3MinAvg, diodeReading;
-}
+} // end func ODRead
 
 // 2b ODCalibrate
 float ODCalibrate() {
@@ -104,8 +109,10 @@ float ODCalibrate() {
     digitalWrite(pinValve, LOW);
   }
 
-  if (debugMode) Serial.println(ODZero);
-
+  if (debugMode) {
+    Serial.print("current OD Zero parameter = ");
+    Serial.println(ODZero);
+  }
   return ODZero;
 }
 
