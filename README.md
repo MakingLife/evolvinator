@@ -1,4 +1,4 @@
-A trimmed down version of the evolvinator
+A trimmed down version of the evolvinator, currently sized at 22184 btyes so will fit on an Uno
 
 The ethernet functionality is removed, timekeeping by the arduino is done by manually entering the time via a 
 
@@ -7,6 +7,8 @@ The ethernet functionality is removed, timekeeping by the arduino is done by man
 function call in void setup()
 
 Deprecating the ethernet functionality means that interactivity is removed
+
+This means that the only way to log and observe values measured by arduino is via Serial Monitor
 
 the following calibration is no longer possible
 
