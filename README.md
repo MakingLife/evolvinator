@@ -1,6 +1,10 @@
 A trimmed down version of the evolvinator
 
-The ethernet functionality is removed, timekeeping by the arduino is done by manually entering the time via a setTime(hr,min,sec,day,month,yr) function call in void setup()
+The ethernet functionality is removed, timekeeping by the arduino is done by manually entering the time via a 
+
+	setTime(hr,min,sec,day,month,yr) 
+
+function call in void setup()
 
 Deprecating the ethernet functionality means that interactivity is removed
 
