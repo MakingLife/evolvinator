@@ -53,6 +53,12 @@ void pulseFeed() {
   tone(pinP1FlowWrite, pulseFreq, pulseDuration);
   totalVol += pulseVol;
   tPulse = now();
+  if (debugMode){
+    Serial.print("pulse parameters; pulseCount = ");
+    Serial.print(pulseCount);
+    Serial.print(", flowrateInstant = ");
+    Serial.println(flowrateInstant);  
+  }
   // SDDataLog('f', pulseCount, flowrateInstant);
 }
 
@@ -64,6 +70,12 @@ void addMedia(float addMediaMl) {
     totalVol += addMediaMl;
     pulseCount += 1;
     float flowrateInstant = pulseVol * 3600 / (now() - tPulse);
+    if (debugMode){
+      Serial.print("pulse parameters; pulseCount = ");
+      Serial.print(pulseCount);
+      Serial.print(", flowrateInstant = ");
+      Serial.println(flowrateInstant);  
+    }
     // SDDataLog('f', pulseCount, flowrateInstant);
   }
   return;
