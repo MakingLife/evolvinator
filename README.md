@@ -7,18 +7,25 @@ Deprecating the ethernet functionality means that interactivity is removed
 the following calibration is no longer possible
 
 *ODCalibrate(); // zero the OD sensor | photodiode
+
 *addMedia(); // manually add media outside of the usual pulses
 
 which means the operation of the script is as follows
 
 *ODRead();
+
 *pulseFeed();
+
 *tempRead(); // Check temp every 5 seconds
+
 *tempWrite(); // PID adjust every 10 seconds
+
 *timeCheck();
+
 *startRun(); // conditionally execute once
 
 Several hardcoded calibration values are set within the script as follows
+
 There are also several functions which may require calibration based on the hardware operation
 
 ====Calibration Parameters====
