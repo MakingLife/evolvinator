@@ -18,6 +18,7 @@
   time_t tElapsed;                          // elapsed time (s)  
   
   boolean calibrated = false;
+  boolean userInput = false;
   boolean halt = false;
   
   // OD aka generic sensor
@@ -40,7 +41,7 @@
   // this code will be run data, main void loop()
   void loop() {
     // Serial.println("waiting");
-    if(calibrated){
+    if(calibrated || userInput){
       Serial.println("loop() begin");
       // If run has started
       digitalWrite(led, LOW);
@@ -52,6 +53,7 @@
         currentMs = millis();
         if (currentMs - oldMsODRead > 60000) {
           SensorRead(); 
+          
           // call to a sensorRead function which should mimic the data logging call
           oldMsODRead = currentMs; 
           // handles doing this once a minute without cause for external time reference
@@ -67,8 +69,7 @@
         // Check and adjust time if neccessary
       currentMs = millis();
       timeCheck();  // only time that a call to check external time is necessary
-      // delay(1000);// this superfluous if using delay within timecheck executions itself
-      // interface();
+      // interface(); // recoded as a serial event function
     }
   }
   
@@ -122,6 +123,7 @@ void timeSync() {
 
           case 'y':
             // do
+            userInput = true;
             calibrated = true;
             Serial.print("you have entered ");
             Serial.print(s);
@@ -131,7 +133,7 @@ void timeSync() {
             break;
           case 'n':
             //do
-            calibrated = true;
+            userInput = true;
             Serial.print("you have entered ");
             Serial.print(s);
             Serial.println(" this means you wish to suspend measurements");
@@ -141,7 +143,7 @@ void timeSync() {
             dataRead();
             break; */
           default:
-            calibrated = false;
+            userInput = false;
             Serial.println("sleeping the measurement apparatus");
             digitalClockDisplay();
         }

@@ -94,7 +94,10 @@ SerialConnection.prototype.disconnect = function() {
   if (this.connectionId < 0) {
     throw 'Invalid connection';
   }
+  serial.flush(this.connectionId, function() {});
   serial.disconnect(this.connectionId, function() {});
+  console.log("successful disconnect");
+  log("successful disconnect");
 };
 
 ////////////////////////////////////////////////////////
@@ -160,6 +163,15 @@ $('#connect').click(function() {
   // when received back the byte count behaves erratically
 });
 
+$('#disconnect').click(function() {
+  connection.disconnect();
+});
+
+$('#calibrate').click(function() {
+  connection.send(''); // above behaviour appears to be a flaw of sending numbers via a UTF8 buffer
+});
+
+
 $('#start').click(function() {
   connection.send('y');
   // when received back the byte count behaves erratically
@@ -175,13 +187,6 @@ $('#time').click(function() {
   // when received back the byte count behaves erratically
 });
 
-$('#numbers').click(function() {
-  connection.send('1234567891011'); // above behaviour appears to be a flaw of sending numbers via a UTF8 buffer
-});
-
-$('#verbose').click(function() {
-  connection.send('a reallly really long set of chars');
-});
 
 var is_on = false;
 $('#toggle').click(function() {
