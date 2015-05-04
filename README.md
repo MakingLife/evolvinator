@@ -2,8 +2,14 @@ A trimmed down version of the evolvinator
 
 The ethernet functionality is removed, timekeeping by the arduino is done by manually entering the time via a setTime(hr,min,sec,day,month,yr) function call in void setup()
 
-Deprecating the ethernet functionality means that interactivity is removed, which means the operation of the script is as follows
+Deprecating the ethernet functionality means that interactivity is removed
 
+the following calibration is no longer possible
+
+ODCalibrate(); // zero the OD sensor | photodiode
+addMedia(); // manually add media outside of the usual pulses
+
+which means the operation of the script is as follows
 
 ODRead();
 pulseFeed();
@@ -15,7 +21,7 @@ startRun(); // conditionally execute once
 Several hardcoded calibration values are set within the script as follows
 There are also several functions which may require calibration based on the hardware operation
 
-Calibration Parameters
+====Calibration Parameters====
 
 	# 1 feed pulsing
 	# globals
