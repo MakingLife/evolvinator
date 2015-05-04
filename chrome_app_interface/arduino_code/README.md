@@ -16,7 +16,7 @@ desried behaviour = continue running its thing
 
     calibrate the device
 
-    once calibration complete run commences
+    once calibration complete, run commences
 
     check if there is a run in progress
 
