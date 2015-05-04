@@ -178,7 +178,7 @@ $('#start').click(function() {
   // when received back the byte count behaves erratically
 });
 
-$('#halt').click(function() {
+$('#interrupt').click(function() {
   connection.send('n');
   // when received back the byte count behaves erratically
 });

@@ -144,7 +144,6 @@ void timeCheck() {
   
   // void interface(){
   void serialEvent() {
-    Serial.println(2);
     //delay(1000);
   // this code handles interactivity from the interface, ergo Serial
     char s;
