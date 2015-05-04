@@ -30,6 +30,8 @@ which means the operation of the script is as follows
 
 *startRun(); // conditionally execute once
 
+What is unclear is what determines how long the code executes for
+
 Several hardcoded calibration values are set within the script as follows
 
 There are also several functions which may require calibration based on the hardware operation

@@ -10,6 +10,9 @@
   
   unsigned long currentMs;
   unsigned long msElapsedPrestart;
+  unsigned long msBackup;                   // associated arduino clock time
+  time_t tBackup;                           // reference time for if time sync with NTP server fails
+
   unsigned long tUnixStart;                 // unix time at run start
   unsigned long tUnix;                      // unix time
   unsigned long countdown;
@@ -17,6 +20,8 @@
   time_t t;                                 // current time
   time_t tElapsed;                          // elapsed time (s)  
   
+  // Modes
+  boolean debugMode = true;
   boolean calibrated = false;
   boolean userInput = false;
   boolean halt = false;
@@ -31,11 +36,9 @@
   
   void setup(){
     Serial.begin(9600);
-    setTime(8,29,0,2,5,15); 
-    // (hr,min,sec,day,month,yr)
-    // set time to some generic vals
+    setTime(8,29,0,2,5,15);  // (hr,min,sec,day,month,yr) set time to some generic vals as fallback against timeInit() below failing
     pinMode(led, OUTPUT);
-    timeCheck(); 
+    timeInit(); 
   }
   
   // this code will be run data, main void loop()
@@ -54,7 +57,6 @@
         currentMs = millis();
         if (currentMs - oldMsODRead > 60000) {
           SensorRead(); 
-          
           // call to a sensorRead function which should mimic the data logging call
           oldMsODRead = currentMs; 
           // handles doing this once a minute without cause for external time reference
@@ -74,13 +76,12 @@
     }
   }
   
-    void timeCheck(){
+    void timeInit(){
       // this code also has to call to the Serial
       // so what would be ideal here is some way of it knowing that a serial connection has been made to the chrome app - like a handshake
       Serial.println(0);
       delay(1000);
       timeSync();
-
     } // end function
   
   
@@ -106,6 +107,38 @@ void timeSync() {
     } // end if 
   } // end while
 
+}
+
+// timeCheck
+void timeCheck() {
+  t = now();
+  if (year(t) == 2015 && currentMs - msBackup > 5 * 60000) {
+    tBackup = now();
+    msBackup = millis();
+    if (debugMode) {
+      Serial.print("Back up time: ");
+      Serial.println(tBackup);
+    }
+  }
+  if (year(t) != 2015) {
+    if (debugMode) {
+      Serial.println("Year is wrong: ");
+      Serial.println(year(t));
+    }
+    setTime(hour(tBackup), minute(tBackup), second(tBackup), day(tBackup), month(tBackup), year(tBackup));
+    int adjustTime = (currentMs - msBackup) / 1000;
+    setTime(hour(tBackup), minute(tBackup) + adjustTime / 60, second(tBackup) + adjustTime % 60, day(tBackup), month(tBackup), year(tBackup));
+    t = now();
+    if (debugMode) {
+      Serial.println("Time failed to reset correctly, backup used");
+      Serial.print("Is year right? ");
+      Serial.println(year(t));
+    }
+  }
+  if (tStart) {
+    tElapsed = t - tStart;
+    tUnix = tUnixStart + tElapsed;
+  }
 }
   
   // void interface(){
@@ -166,7 +199,7 @@ void timeSync() {
     tUnixStart += (millis() - msElapsedPrestart) / 1000;    // to adjust unix time
     tUnix = tUnixStart + tElapsed;
     // SDInitialize();
-    // digitalWrite(pinValve, LOW);          // open air valve
+    digitalWrite(pinValve, LOW);          // open air valve
   }
   
   void SensorRead(){
