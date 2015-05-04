@@ -27,16 +27,7 @@ Evolvinator
 
 
 // Ethernet  
-byte mac[] = { 
-  0x90, 0xA2, 0xDA, 0x00, 0x4F, 0x74 };   // ENTER MAC address of ethernet shield
-IPAddress ip(192, 168, 100, 52);          // ENTER IP address 
-/*byte mac[] = { 
- 0x90, 0xA2, 0xDA, 0x00, 0x59, 0x5E };    
- byte ip[] = { 
- 192, 168, 100, 53 };*/
-// static ip address to connect to
-EthernetServer server(80);                // default web request server
-EthernetUDP Udp;
+ // server deprecated for quickstart
 
 // Time
 unsigned long currentMs;
@@ -44,12 +35,6 @@ unsigned long oldMsTempRead = 0;
 unsigned long oldMsTempCheck = 0;
 unsigned long oldMsODRead = 0;
 unsigned long oldMsPulseFed = 0;         
-
-const int localPort = 8888;               // local port to listen for UDP packets
-byte timeServer[] = { 
-  192, 43, 244, 18};                      // time.nist.gov NTP server
-const int NTP_PACKET_SIZE= 48;            // NTP time stamp is in the first 48 bytes of the message
-byte packetBuffer[ NTP_PACKET_SIZE];      // buffer to hold incoming and outgoing packets from NTP
 
 time_t epoch; // only other reference to epoch is within Evo_Time and it is retrieved via the server
 
@@ -105,8 +90,7 @@ void setup() {
   // Serial, Ethernet
   Serial.begin(9600);
   pinMode(53, OUTPUT);                      // SS pin on Mega
-  Ethernet.begin(mac, ip);
-  server.begin();
+
   delay(1);                                 // give it a msecond to connect
 
   // Pump Control
@@ -130,7 +114,7 @@ void setup() {
   tempPID.SetOutputLimits(0, 70);
 
   // Timer
-  setTime(15,29,0,4,5,15); // (hr,min,sec,day,month,yr)
+  setTime(15,29,0,4,5,15); // (hr,min,sec,day,month,yr) CALIBRATION
   setSyncInterval(60 * 5);
   tBackup = now();                          // set back up time
   msBackup = millis();                      // set assocated backup time on Arduino's internal clock
@@ -179,7 +163,7 @@ void loop() {
   timeCheck();  // call to EvoTime
   
   // Check for web requests
-  webLoop(); 
+  // webLoop(); 
   // currently this loop makes no call to the startRun() function, which is the one doing the main work
   startRun();
 }

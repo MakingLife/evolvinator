@@ -1,3 +1,5 @@
 # Chrome Testing Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 chrome_app_interface/node_modules
+chrome_app_interface/.idea
+change_log.txt
