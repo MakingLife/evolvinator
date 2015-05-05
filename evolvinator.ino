@@ -128,6 +128,7 @@ void setup() {
   SD.begin(pinSD);
   if (!SD.begin(pinSD)) {
     Serial.println("SD initialization failed!");
+    delay(1000);
     return;
   }
 
