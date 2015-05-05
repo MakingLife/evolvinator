@@ -78,7 +78,7 @@ const byte pinUVLED = 2;                  // pin that powers the UV LED
 boolean debugMode = true;
 boolean calibrationMode = false;
 
-// SD
+// SD  
 const int pinSD = 10; // 10 for adafruit, 4 for ethernet shield
 // aribtrary comment because git
 
@@ -137,6 +137,11 @@ void setup() {
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Loop - is program <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 void loop() {
 
+    // currently this loop makes no call to the startRun() function, which is the one doing the main work
+  if (!tStart) {
+    startRun();
+  }
+  
   // If run has started
   if (tStart) {
     // Take OD measurement ever minute
@@ -169,10 +174,7 @@ void loop() {
   
   // Check for web requests
   // webLoop(); 
-  // currently this loop makes no call to the startRun() function, which is the one doing the main work
-  if (!tStart) {
-    startRun();
-  }
+
 }
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Functions - List function calls below <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
