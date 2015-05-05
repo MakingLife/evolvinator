@@ -59,7 +59,7 @@ void pulseFeed() {
     Serial.print(", flowrateInstant = ");
     Serial.println(flowrateInstant);  
   }
-  // SDDataLog('f', pulseCount, flowrateInstant);
+  SDDataLog('f', pulseCount, flowrateInstant);
 }
 
 // 1c addMedia - adds x ml of media
@@ -76,7 +76,7 @@ void addMedia(float addMediaMl) {
       Serial.print(", flowrateInstant = ");
       Serial.println(flowrateInstant);  
     }
-    // SDDataLog('f', pulseCount, flowrateInstant);
+    SDDataLog('f', pulseCount, flowrateInstant);
   }
   return;
 }

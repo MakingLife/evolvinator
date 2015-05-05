@@ -79,7 +79,7 @@ boolean debugMode = true;
 boolean calibrationMode = false;
 
 // SD
-// const int pinSD = 4;
+const int pinSD = 10; // 10 for adafruit, 4 for ethernet shield
 
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Setup - runs once <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
@@ -125,7 +125,11 @@ void setup() {
   }
   
     // SD
-  // SD.begin(pinSD);
+  SD.begin(pinSD);
+  if (!SD.begin(pinSD)) {
+    Serial.println("SD initialization failed!");
+    return;
+  }
 
 }
 
@@ -197,7 +201,7 @@ void startRun() {
   tElapsed = 0;
   tUnixStart += (millis() - msElapsedPrestart) / 1000;    // to adjust unix time
   tUnix = tUnixStart + tElapsed;
-  // SDInitialize();
+  SDInitialize();
   digitalWrite(pinValve, LOW);          // open air valve
 }
 
