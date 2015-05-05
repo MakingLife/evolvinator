@@ -53,7 +53,7 @@ const byte pinP1FlowWrite = 0;            // which pin tells p1 (through pin 14)
 unsigned long feedFrequency = 180000;     // frequency of the pulses given (default 1 ever 3 minutes)
 
 // OD
-const byte pinODLED = 1;                  // pin that powers the OD LED
+const byte pinODLED = 4;                  // pin that powers the OD LED
 const byte pinODRead = A1;                // pin that reads the OD sensor
 const byte pinValve = 3;                  // pin that controls the valve
 float ODDesired = 0.5;                    // Set desired OD
@@ -80,7 +80,7 @@ boolean calibrationMode = false;
 
 // SD
 const int pinSD = 10; // 10 for adafruit, 4 for ethernet shield
-
+// aribtrary comment because git
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Setup - runs once <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 void setup() {
