@@ -115,7 +115,7 @@ void htmlFooter(EthernetClient client) {
 
 void htmlRedirect(EthernetClient client) {
   client.println("<HTML>\n<HEAD>");
-  client.println("<meta http-equiv='Refresh' content='0;url=http://192.168.100.53' />");
+  client.println("<meta http-equiv='Refresh' content='0;url=http://192.168.1.36' />"); // ENTER, if this not changed  then no redirects will work
   client.println("<BODY>Redirecting</BODY>");
   client.println("</HEAD>\n</HTML>");
 }
