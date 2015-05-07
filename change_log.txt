@@ -1,0 +1,8 @@
+two primary functions for app
+
+startRun()
+checkTime() provideTime()
+
+TimeSerial processes incoming serial char by chat, IIRC that is not necessary with the Chrome response being able to send buffers and such
+
+webLoop(); = rewritten as a Serial.Available loop

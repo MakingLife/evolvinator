@@ -29,7 +29,8 @@ Evolvinator
 // Ethernet  
 byte mac[] = { 
   0x90, 0xA2, 0xDA, 0x00, 0x4F, 0x74 };   // ENTER MAC address of ethernet shield
-IPAddress ip(192, 168, 100, 52);          // ENTER IP address 
+IPAddress ip(192, 168, 1, 36);          // ENTER IP address 
+// LAN IP address = 192.168.1.36
 // DHcp address printer sketch returned 192.168.119.215, however it returns a dynamic address each time via eduroam
 //  will need to run this off a LAN because of eduoroam
 
@@ -39,7 +40,7 @@ IPAddress ip(192, 168, 100, 52);          // ENTER IP address
  192, 168, 100, 53 };*/
 // static ip address to connect to
 EthernetServer server(80);                // default web request server
-EthernetUDP Udp;
+EthernetUDP Udp; // UDP is used as the protocol and buffer to best retrieve the time from one of the NTP server
 
 // Time
 unsigned long currentMs;
@@ -97,7 +98,7 @@ boolean debugMode = true;
 boolean calibrationMode = false;
 
 // SD
-// const int pinSD = 4;
+const int pinSD = 4;
 
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Setup - runs once <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
@@ -146,7 +147,6 @@ void setup() {
     setSyncInterval(60 * 5);
   }
   
-  
   tUnixStart = tUnix; 
   tBackup = now();                          // set back up time
   msBackup = millis();                      // set assocated backup time on Arduino's internal clock
@@ -157,7 +157,7 @@ void setup() {
   }
   
     // SD
-  // SD.begin(pinSD);
+  SD.begin(pinSD);
 
 }
 
@@ -198,9 +198,9 @@ void loop() {
   webLoop(); 
   // currently this loop makes no call to the startRun() function, which is the one doing the main work
   // startRun();
-  if (!tStart) {
-    startRun();
-  }
+  // if (!tStart) {
+    //startRun();
+  //}
 }
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Functions - List function calls below <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
@@ -230,7 +230,7 @@ void startRun() {
   tElapsed = 0;
   tUnixStart += (millis() - msElapsedPrestart) / 1000;    // to adjust unix time
   tUnix = tUnixStart + tElapsed;
-  // SDInitialize();
+  SDInitialize();
   digitalWrite(pinValve, LOW);          // open air valve
 }
 

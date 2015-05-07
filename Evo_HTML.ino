@@ -8,6 +8,7 @@ boolean reload = false;           // variable to control redirecting, was buggin
 // 5a webLoop - prints data to webserver if there is a request
 void webLoop() {
   boolean dataRead = false;                // flag for if data has been read
+  boolean reload = false; // suspect it needs to be local to loop
   EthernetClient client = server.available();
   if (client) {                                         
     while (client.connected()) {
@@ -18,10 +19,15 @@ void webLoop() {
           break;
         }
         if (reload == true) {             // redirect to main page if parameter has been changed
-          htmlRedirect(client);
+          if(debugMode) {}
+        
+          htmlRedirect(client); // refresh page
           client.stop();
+          // delay(5000); // used to break up the network requests to a human legible frequency
           webLoop();
           break;
+        } else {
+        
         }
 
         htmlHeader(client);
@@ -115,7 +121,7 @@ void htmlFooter(EthernetClient client) {
 
 void htmlRedirect(EthernetClient client) {
   client.println("<HTML>\n<HEAD>");
-  client.println("<meta http-equiv='Refresh' content='0;url=http://192.168.1.36' />"); // ENTER, if this not changed  then no redirects will work
+  client.println("<meta http-equiv='Refresh' content='0;url=http://192.168.1.36:80' />"); // ENTER, if this not changed  then no redirects will work
   client.println("<BODY>Redirecting</BODY>");
   client.println("</HEAD>\n</HTML>");
 }
@@ -226,7 +232,7 @@ void parseHttpHeader(EthernetClient client, boolean *dataRead) {
     reload = true;
     break;
   case 'd':
-    // SDWebLoad(client);
+    SDWebLoad(client);
     *dataRead = true;
     break;
   case 'e':
@@ -235,7 +241,7 @@ void parseHttpHeader(EthernetClient client, boolean *dataRead) {
     for (int i=0; i < 10; i++) {
       unixTimeStamp[i] = client.read(); //record unix timestamp
     }
-    // SDWebLoadLIMS(client, unixTimeStamp);
+    SDWebLoadLIMS(client, unixTimeStamp);
     *dataRead = true;
     break;
   case 'a':
