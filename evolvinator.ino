@@ -139,7 +139,7 @@ void setup() {
   
   // hardcoded time
   if (debugMode) {
-    setTime(15,29,0,4,5,15); // (hr,min,sec,day,month,yr) CALIBRATION
+    setTime(17,13,0,7,5,15); // (hr,min,sec,day,month,yr) CALIBRATION
     setSyncInterval(60 * 5);
   } else {
     // network synced time
