@@ -130,10 +130,20 @@ void setup() {
   tempPID.SetOutputLimits(0, 70);
 
   // Timer
+  
   Udp.begin(localPort);
+  
+  // hardcoded time
+  if (debugMode) {
+    setTime(15,29,0,4,5,15); // (hr,min,sec,day,month,yr) CALIBRATION
+    setSyncInterval(60 * 5);
+  } else {
+    // network synced time
+    setSyncInterval(60 * 5);
+  }
   // BREAK below is the point at which the code will break in absence of an ethernet cable
   //setSyncProvider(getTime);                 // sync interval default is 5 mins 
-  setSyncInterval(60 * 5);
+  
   tUnixStart = tUnix; 
   tBackup = now();                          // set back up time
   msBackup = millis();                      // set assocated backup time on Arduino's internal clock
@@ -184,7 +194,10 @@ void loop() {
   // Check for web requests
   webLoop(); 
   // currently this loop makes no call to the startRun() function, which is the one doing the main work
-  startRun();
+  // startRun();
+  if (!tStart) {
+    startRun();
+  }
 }
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Functions - List function calls below <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
