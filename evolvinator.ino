@@ -30,6 +30,9 @@ Evolvinator
 byte mac[] = { 
   0x90, 0xA2, 0xDA, 0x00, 0x4F, 0x74 };   // ENTER MAC address of ethernet shield
 IPAddress ip(192, 168, 100, 52);          // ENTER IP address 
+// DHcp address printer sketch returned 192.168.119.215, however it returns a dynamic address each time via eduroam
+//  will need to run this off a LAN because of eduoroam
+
 /*byte mac[] = { 
  0x90, 0xA2, 0xDA, 0x00, 0x59, 0x5E };    
  byte ip[] = { 
