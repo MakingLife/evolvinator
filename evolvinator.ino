@@ -142,10 +142,10 @@ void setup() {
     setSyncInterval(60 * 5);
   } else {
     // network synced time
+    setSyncProvider(getTime);                 // sync interval default is 5 mins, uses NTP which in accessible via current simple LAN 
     setSyncInterval(60 * 5);
   }
-  // BREAK below is the point at which the code will break in absence of an ethernet cable
-  //setSyncProvider(getTime);                 // sync interval default is 5 mins 
+  
   
   tUnixStart = tUnix; 
   tBackup = now();                          // set back up time
