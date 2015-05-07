@@ -4,6 +4,15 @@ Arduino Uno Sketch Size Maximum == 32,256 byte maximum
 
 Code will execute upon upload, even if SD, ethernet and sensors hardware dependencies are not met
 
+Yet To Implement
+
+SD debugging
+Native SD debug info
+the SD card logging specified within evolvinator works, however it is not possible to debug the SD card via CardInfo (example sketch) when shield is connected to Mega. Presently checking successful logging requires loading SD into main computer, or loading it to an Uno board with CardInfo script (and utilising a different SD shield)
+
+// If you are using multiple shields, make sure each has a unique mac address.
+^~> Will need to liase with Erich regarding the network setup of the gallery space
+
 Debugging Arduino IDE on Linux
 
 Successful workarounds
