@@ -55,10 +55,14 @@ float ODRead() {
   }
   ODMin[0] = float(diodeReading);
   ODMin[0] = (log(1 / (ODMin[0] / ODZero)) / log(10));
+  // when ODZero = 0 above returns infinity, when ODZero = 1, negative values are returned
+
   ODMin[0] = ODMin[0] * .9861 + 0.0058;           // **TRANSFER FUNCTION FROM CALIBRATION**
-  if (ODMin[0] < 0) {                             // set it to 0 if negative value is read
-    ODMin[0] = 0;
-  }
+  
+  // if (ODMin[0] < 0) {                             
+  //   ODMin[0] = 0;
+  // }
+  // ^~> set it to 0 if negative value is read
   OD3MinAvg = (ODMin[0] + ODMin[1] + ODMin[2]) / 3;
 
   ODCount += 1; 

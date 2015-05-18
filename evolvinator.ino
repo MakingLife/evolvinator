@@ -29,7 +29,7 @@ Evolvinator
 // Ethernet  
 byte mac[] = { 
   0x90, 0xA2, 0xDA, 0x00, 0x4F, 0x74 };   // ENTER MAC address of ethernet shield
-IPAddress ip(192, 168, 1, 36);          // ENTER IP address 
+IPAddress ip(192, 168, 1, 88);          // ENTER IP address 
 // LAN IP address = 192.168.1.36
 // DHcp address printer sketch returned 192.168.119.215, however it returns a dynamic address each time via eduroam
 //  will need to run this off a LAN because of eduoroam
@@ -72,7 +72,7 @@ const byte pinP1FlowWrite = 0;            // which pin tells p1 (through pin 14)
 unsigned long feedFrequency = 180000;     // frequency of the pulses given (default 1 ever 3 minutes)
 
 // OD
-const byte pinODLED = 1;                  // pin that powers the OD LED
+const byte pinODLED = 6;                  // pin that powers the OD LED - move away from using the TX
 const byte pinODRead = A1;                // pin that reads the OD sensor
 const byte pinValve = 3;                  // pin that controls the valve
 float ODDesired = 0.5;                    // Set desired OD
@@ -139,7 +139,7 @@ void setup() {
   
   // hardcoded time
   if (debugMode) {
-    setTime(17,13,0,7,5,15); // (hr,min,sec,day,month,yr) CALIBRATION
+    setTime(12,18,0,18,5,15); // (hr,min,sec,day,month,yr) CALIBRATION
     setSyncInterval(60 * 5);
   } else {
     // network synced time
