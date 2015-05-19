@@ -3,6 +3,15 @@ Evolvinator
  
  REV 1
  
+ The Evolvinator uses an Arduino MEGA for its expanded memory
+ 
+ It uses an ethernet shield to connect to the NTP servers (timekeeping) and to provide a debug interface
+ 
+ The following PINS are reserved
+ reserves the pins for 50, 51, 52 SPI communication (the same as in the ICSP connector) and pin 53
+ reserves pin 10 Ethernet circuit choice
+ reserves pin 4 for SD memory card
+ 
  This program controls the Evolvinator. There are 3 main components:
  Pump Control - dictates the speed of the p-1 perstaltic pump
  OD Sensor - makes OD measurements
@@ -75,14 +84,14 @@ unsigned long feedFrequency = 180000;     // frequency of the pulses given (defa
 const byte pinODLED = 6;                  // pin that powers the OD LED - move away from using the TX
 const byte pinODRead = A1;                // pin that reads the OD sensor
 const byte pinValve = 3;                  // pin that controls the valve
-float ODDesired = 0.5;                    // Set desired OD
+float ODDesired = 0.2;                    // Set desired OD
 float ODMin[10];                          // stores recent OD measurements (current = ODMin[0]                         
 float OD3MinAvg;
 float ODZero = 0;                         // photodiode blank reading 
 
 // Temp - temp is temperature of sensor (metal) unless otherwise indicated
 const byte pinTempRead = A0;              // analog input will read variable voltage from AD22100
-const byte pinTempWrite = 5;              // sends PWM to resistors to control temp
+// const byte pinTempWrite = 5;              // sends PWM to resistors to control temp
 float tempDesired = 37;                   // Set desired temperature
 float tempPrintAvg;                       // temperature converted to water temp
 double temp, tempPWM, tempDesiredPID;
@@ -94,7 +103,7 @@ PID tempPID(&temp, &tempPWM, &tempDesiredPID, aggKp, aggKi, aggKd, DIRECT);
 const byte pinUVLED = 2;                  // pin that powers the UV LED
 
 // Modes
-boolean debugMode = true;
+boolean debugMode = false;
 boolean calibrationMode = false;
 
 // SD
@@ -127,7 +136,7 @@ void setup() {
 
   // Temp Control
   pinMode(pinTempRead, INPUT);              // pin that reads the temp sensor is input
-  pinMode(pinTempWrite, OUTPUT);            // pin that controls heating resistors is output
+  // pinMode(pinTempWrite, OUTPUT);            // pin that controls heating resistors is output
   tempSet(); // call to Evo_Temp.ino
   tempPID.SetMode(AUTOMATIC);
   tempPID.SetSampleTime(10000);
@@ -139,7 +148,7 @@ void setup() {
   
   // hardcoded time
   if (debugMode) {
-    setTime(12,18,0,18,5,15); // (hr,min,sec,day,month,yr) CALIBRATION
+    setTime(11,37,0,19,5,15); // (hr,min,sec,day,month,yr) CALIBRATION
     setSyncInterval(60 * 5);
   } else {
     // network synced time
@@ -182,13 +191,13 @@ void loop() {
   }
 
   // Check temp every 5 seconds
-  currentMs = millis();                    
-  if (currentMs - oldMsTempRead > 5000) {  
-    tempRead(); // call to Evo_Temp
-    oldMsTempRead = currentMs;
-  }
+//  currentMs = millis();                    
+//  if (currentMs - oldMsTempRead > 5000) {  
+//    tempRead(); // call to Evo_Temp
+//    oldMsTempRead = currentMs;
+//  }
   // PID adjust every 10 seconds
-  tempWrite(); 
+//  tempWrite(); 
 
   // Check and adjust time if neccessary
   currentMs = millis();

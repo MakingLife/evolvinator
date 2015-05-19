@@ -60,7 +60,7 @@ void tempWrite() {
   else tempPID.SetTunings(aggKp, aggKi, aggKd);
 
   tempPID.Compute();
-  analogWrite(pinTempWrite, tempPWM);
+  // analogWrite(pinTempWrite, tempPWM);
 }
 
 
