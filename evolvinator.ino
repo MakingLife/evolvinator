@@ -77,7 +77,7 @@ unsigned long tUnix;                      // unix time
 unsigned long msElapsedPrestart;          // ms elapsed run start.
 
 // Flow
-const byte pinP1FlowWrite = 0;            // which pin tells p1 (through pin 14) what speed (0-200 Hz)
+const byte pinP1FlowWrite = 9;            // which pin tells p1 (through pin 14) what speed (0-200 Hz)
 unsigned long feedFrequency = 180000;     // frequency of the pulses given (default 1 ever 3 minutes)
 
 // OD
@@ -103,7 +103,7 @@ PID tempPID(&temp, &tempPWM, &tempDesiredPID, aggKp, aggKi, aggKd, DIRECT);
 const byte pinUVLED = 2;                  // pin that powers the UV LED
 
 // Modes
-boolean debugMode = false;
+boolean debugMode = true;
 boolean calibrationMode = false;
 
 // SD

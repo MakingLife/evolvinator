@@ -1,4 +1,8 @@
 /* 1 Flow Control -----------------------------------------------------------
+
+9ml per minute with the motor we have
+
+
  1a flowSet
  1b pulseFeed
  1c addMedia 

@@ -49,7 +49,7 @@ float ODRead() {
 
   digitalWrite(pinValve, LOW);                    // turn air back on
 
-  diodeReading /= 5;
+  // diodeReading /= 5;
   if (diodeReading < 1) {                         // correct for super high OD
     diodeReading = 1;
   }
