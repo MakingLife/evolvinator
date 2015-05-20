@@ -83,9 +83,10 @@ void webLoop() {
         fieldSubmitButton(client, "Change Max Flowrate (ml/h):", "f");
         fieldSubmitButton(client, "Change Temperature:", "t");
         submitButton(client, "Zero OD Sensor", "z");
+        submitButton(client, "Test Pump", "p");
         fieldSubmitButton(client, "Add Media (ml):", "a");
 
-        submitButton(client, "Toggle Debug Mode", "i");
+        submitButton(client, "Toggle Exhibition Mode", "i");
         if (debugMode) {
           client.print("Debug:<br />");
           client.print("tstat1v5.5<br />Unix Time ");
@@ -213,16 +214,6 @@ void parseHttpHeader(EthernetClient client, boolean *dataRead) {
     flowSet();
     reload = true;
     break; 
-//  case 't':   
-//    client.read();             // skip = sign
-//    char tempHtml[5];      // 4 character string (3 numbers with decimal)
-//    for (int i=0; i < 4; i++) {
-//      tempHtml[i] = client.read(); // Read data
-//    }
-//    tempDesired = atof(tempHtml);
-//    tempSet();
-//    reload = true;
-//    break;
   case 's':
     startRun();
     reload = true;    
@@ -231,6 +222,11 @@ void parseHttpHeader(EthernetClient client, boolean *dataRead) {
     ODCalibrate();
     reload = true;
     break;
+  case 'p':
+    exhibitionPulse();
+    reload = true;
+    break;
+    
   case 'd':
     SDWebLoad(client);
     *dataRead = true;
@@ -246,19 +242,19 @@ void parseHttpHeader(EthernetClient client, boolean *dataRead) {
     break;
   case 'a':
     {  
-      client.read();             // skip = sign
-      char addMediaHtml[5];      // 4 character string (3 numbers with decimal)
-      for (int i=0; i < 4; i++) {
-        addMediaHtml[i] = client.read(); // Read and dump data to debug port
-      }
-      float addMediaMl = atof(addMediaHtml);
-      addMedia(addMediaMl);
+        client.read();             // skip = sign
+        char addMediaHtml[5];      // 4 character string (3 numbers with decimal)
+        for (int i=0; i < 4; i++) {
+          addMediaHtml[i] = client.read(); // Read and dump data to debug port
+        }
+        float addMediaMl = atof(addMediaHtml);
+        addMedia(addMediaMl);
       reload = true;
       break;
     }
   case 'i':
-    if (debugMode) debugMode = false;
-    else debugMode = true;
+    if (exhibitionMode) exhibitionMode = false;
+    else exhibitionMode = true;
     reload = true;
     break;
   }

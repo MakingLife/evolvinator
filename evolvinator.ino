@@ -12,6 +12,8 @@ Evolvinator
  reserves pin 10 Ethernet circuit choice
  reserves pin 4 for SD memory card
  
+ pins 13, 12, 11, 9, 6 available for pulse width modulation
+ 
  This program controls the Evolvinator. There are 3 main components:
  Pump Control - dictates the speed of the p-1 perstaltic pump
  OD Sensor - makes OD measurements
@@ -72,7 +74,7 @@ unsigned long msElapsedPrestart;          // ms elapsed run start.
 
 // Flow
 const byte pinP1FlowWrite = 8;            // which pin tells p1 (through pin 14) what speed (0-200 Hz)
-unsigned long feedFrequency = 180000;     // frequency of the pulses given (default 1 ever 3 minutes)
+unsigned long feedFrequency = 60000;     // frequency of the pulses given (default 1 ever 3 minutes), 300000 = once every 5 minutes
 
 // OD
 const byte pinODLED = 7;                  // pin that powers the OD LED - move away from using the TX
@@ -86,7 +88,7 @@ float ODZero = 0;                         // photodiode blank reading
 // Modes
 boolean debugMode = true;
 boolean calibrationMode = false;
-boolean exhibitionMode = false;
+boolean exhibitionMode = true;
 
 // SD
 const int pinSD = 4;
@@ -116,13 +118,16 @@ void setup() {
   pinMode(pinValve, OUTPUT);                // pin that controls valve is output
   digitalWrite(pinValve, LOW);              // valve open at start
 
+  // Lights
+  pinMode(11, OUTPUT);
+
   // Timer
   
   Udp.begin(localPort);
   
   // hardcoded time
   if (debugMode) {
-    setTime(11,37,0,19,5,15); // (hr,min,sec,day,month,yr) CALIBRATION
+    setTime(15,43,0,20,5,15); // (hr,min,sec,day,month,yr) CALIBRATION
     setSyncInterval(60 * 5);
   } else {
     // network synced time
@@ -160,10 +165,24 @@ void loop() {
     currentMs = millis();
     
     if(exhibitionMode) {
-      
       // if its exhibition mode we want the motor to pulse for a minute every 10 minutes? = 90ml an hour, = the entire bacteria is diluted
-      // pulse for 30 seconds every 5 - 10 minutes
-    
+      
+      // the LEDs are also designed to be mapped to a cyclic duration - day length abstracted to ms, using currentMs as the base 
+      if(currentMs - oldMsPulseFed > feedFrequency){
+        // pulse for 30 seconds every 5 minutes, diluting culure in 100ml chamber by 5.5ml
+        exhibitionPulse();
+        oldMsPulseFed = currentMs;
+      }
+      
+//      for(int cnt = 0; cnt < 255; cnt++){
+//        analogWrite(11, cnt);
+//        delay(30);
+//      }
+//      delay(30);
+//      for(int cnt = 255; cnt > 0; cnt--){
+//        analogWrite(11, cnt);
+//        delay(30);
+//      }  
     } else {
     
       if (OD3MinAvg > ODDesired && currentMs - oldMsPulseFed > feedFrequency) {
@@ -181,9 +200,16 @@ void loop() {
   webLoop(); 
   // currently this loop makes no call to the startRun() function, which is the one doing the main work
   // startRun();
-  if (!tStart) {
-    startRun();
-  }
+//  if (!tStart) {
+//    startRun();
+//  }
+}
+
+boolean exhibitionPulse(){
+  digitalWrite(pinP1FlowWrite, HIGH);
+  delay(5000);
+  digitalWrite(pinP1FlowWrite, LOW);
+  return true;
 }
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Functions - List function calls below <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
