@@ -53,7 +53,10 @@ EthernetUDP Udp; // UDP is used as the protocol and buffer to best retrieve the 
 // Lights
 /* simulated day lengths required */
 
-unsigned long dayLength;
+unsigned long dayLengthStep = 30; // the value which when elapsed in microseconds will dim the lights of the evolvinator
+unsigned long oldDayLengthRead = 0;
+int lightArc = 0;
+int lightStep = 1;
 
 // Time
 unsigned long currentMs;
@@ -161,6 +164,7 @@ void loop() {
   if (tStart) {
     // Take OD measurement ever minute
     currentMs = millis();
+    analogWrite(11, lightArc);
     if (currentMs - oldMsODRead > 60000) {
       ODRead(); // call to Evo_OD
       oldMsODRead = currentMs;
@@ -172,22 +176,24 @@ void loop() {
     if(exhibitionMode) {
       // if its exhibition mode we want the motor to pulse for a minute every 10 minutes? = 90ml an hour, = the entire bacteria is diluted
       
+      if (currentMs - oldDayLengthRead > dayLengthStep){
+        // change the lightVal
+        lightArc = lightArc+lightStep;
+        oldDayLengthRead = currentMs;
+        // transition from day to night
+        if (lightArc == 0 || lightArc == 255) {
+          lightStep = -lightStep;
+        }
+      }
+
+      
       // the LEDs are also designed to be mapped to a cyclic duration - day length abstracted to ms, using currentMs as the base 
       if(currentMs - oldMsPulseFed > feedFrequency){
         // pulse for 30 seconds every 5 minutes, diluting culure in 100ml chamber by 5.5ml
         exhibitionPulse();
         oldMsPulseFed = currentMs;
       }
-      
-      for(int cnt = 0; cnt < 255; cnt++){
-        analogWrite(11, cnt);
-        delay(30);
-      }
-      delay(30);
-      for(int cnt = 255; cnt > 0; cnt--){
-        analogWrite(11, cnt);
-        delay(30);
-      }  
+       
     } else {
     
       if (OD3MinAvg > ODDesired && currentMs - oldMsPulseFed > feedFrequency) {
