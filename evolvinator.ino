@@ -50,6 +50,11 @@ IPAddress ip(192, 168, 1, 88);          // ENTER IP address
 EthernetServer server(80);                // default web request server
 EthernetUDP Udp; // UDP is used as the protocol and buffer to best retrieve the time from one of the NTP server
 
+// Lights
+/* simulated day lengths required */
+
+unsigned long dayLength;
+
 // Time
 unsigned long currentMs;
 unsigned long oldMsODRead = 0;
@@ -108,7 +113,7 @@ void setup() {
 
   // Pump Control
   pinMode(pinP1FlowWrite, OUTPUT);          // output to pump what speed it should go (tone between 0-200 Hz)
-  flowSet(); // call to Evo_Flow.ino
+  // flowSet(); // call to Evo_Flow.ino
 
   // OD Sensor
   pinMode(pinODLED, OUTPUT);                // pin that controls LED is output
@@ -174,15 +179,15 @@ void loop() {
         oldMsPulseFed = currentMs;
       }
       
-//      for(int cnt = 0; cnt < 255; cnt++){
-//        analogWrite(11, cnt);
-//        delay(30);
-//      }
-//      delay(30);
-//      for(int cnt = 255; cnt > 0; cnt--){
-//        analogWrite(11, cnt);
-//        delay(30);
-//      }  
+      for(int cnt = 0; cnt < 255; cnt++){
+        analogWrite(11, cnt);
+        delay(30);
+      }
+      delay(30);
+      for(int cnt = 255; cnt > 0; cnt--){
+        analogWrite(11, cnt);
+        delay(30);
+      }  
     } else {
     
       if (OD3MinAvg > ODDesired && currentMs - oldMsPulseFed > feedFrequency) {
