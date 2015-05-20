@@ -1,9 +1,12 @@
 /* 1 Flow Control -----------------------------------------------------------
 
-9ml per minute with the motor we have
+9ml per minute with the motor we have when motor runs on 6volts or 5 volts
+5.55ml per minute with the motor running on 3.3v
+motor will run on 5v board and 3v board, 3v is minimum viable
 
 
- 1a flowSet
+
+ 1a flowSet - called during evolvinator void setup()
  1b pulseFeed
  1c addMedia 
  */
@@ -23,6 +26,8 @@ int pulseCount = 0;
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Functions<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 // 1a flowSet -- changes the frequency and pulse duration settings
 void flowSet() {
+  
+  
   pulseFreq = int((flowMax * (3600 / 200) + 1.1148) / 0.6757) + 1; // convert max flow to Hz (10 second pulse 20 times an hour) **FROM CALIBRATION**
   pulseFreq = constrain(pulseFreq, 31, 200);
   if (pulseFreq == 200) {                                          // if flow Hz is maxed, change pulse duration

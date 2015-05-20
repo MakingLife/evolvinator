@@ -42,7 +42,7 @@ void webLoop() {
         displayData(client, "Maximum Flow", flowMax, "ml/hr");
         displayData(client, "Pulse Volume", pulseVol, "ml");
         displayData(client, "Max Pulse Frequency", float(feedFrequency / 1000), "seconds");
-        displayData(client, "Temperature Desired", tempDesired, "C");
+//        displayData(client, "Temperature Desired", tempDesired, "C");
         client.print("</p>");
 
         // Pre run optionst
@@ -53,7 +53,7 @@ void webLoop() {
         // Run Data
         // Temp
         client.print("<p>");
-        displayData(client, "One Minute Temperature Average", tempPrintAvg, "C");
+//        displayData(client, "One Minute Temperature Average", tempPrintAvg, "C");
         client.print("</p>");
         if (tStart) {
           // Time
@@ -213,16 +213,16 @@ void parseHttpHeader(EthernetClient client, boolean *dataRead) {
     flowSet();
     reload = true;
     break; 
-  case 't':   
-    client.read();             // skip = sign
-    char tempHtml[5];      // 4 character string (3 numbers with decimal)
-    for (int i=0; i < 4; i++) {
-      tempHtml[i] = client.read(); // Read data
-    }
-    tempDesired = atof(tempHtml);
-    tempSet();
-    reload = true;
-    break;
+//  case 't':   
+//    client.read();             // skip = sign
+//    char tempHtml[5];      // 4 character string (3 numbers with decimal)
+//    for (int i=0; i < 4; i++) {
+//      tempHtml[i] = client.read(); // Read data
+//    }
+//    tempDesired = atof(tempHtml);
+//    tempSet();
+//    reload = true;
+//    break;
   case 's':
     startRun();
     reload = true;    

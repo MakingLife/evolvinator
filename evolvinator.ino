@@ -31,9 +31,6 @@ Evolvinator
 #include <EthernetUdp.h>
 #include <Time.h>
 #include <SD.h>
-#include <PID_v1.h>
-// ^~> utilised "A PID controller calculates an 'error' value as the difference between a measured [Input] and a desired setpoint" http://playground.arduino.cc/Code/PIDLibrary
-
 
 // Ethernet  
 byte mac[] = { 
@@ -53,8 +50,6 @@ EthernetUDP Udp; // UDP is used as the protocol and buffer to best retrieve the 
 
 // Time
 unsigned long currentMs;
-unsigned long oldMsTempRead = 0;
-unsigned long oldMsTempCheck = 0;
 unsigned long oldMsODRead = 0;
 unsigned long oldMsPulseFed = 0;         
 
@@ -65,7 +60,6 @@ const int NTP_PACKET_SIZE= 48;            // NTP time stamp is in the first 48 b
 byte packetBuffer[ NTP_PACKET_SIZE];      // buffer to hold incoming and outgoing packets from NTP
 
 time_t epoch; // only other reference to epoch is within Evo_Time and it is retrieved via the server
-
 time_t tStart;                            // starting time
 time_t t;                                 // current time
 time_t tElapsed;                          // elapsed time (s)
@@ -77,11 +71,11 @@ unsigned long tUnix;                      // unix time
 unsigned long msElapsedPrestart;          // ms elapsed run start.
 
 // Flow
-const byte pinP1FlowWrite = 9;            // which pin tells p1 (through pin 14) what speed (0-200 Hz)
+const byte pinP1FlowWrite = 8;            // which pin tells p1 (through pin 14) what speed (0-200 Hz)
 unsigned long feedFrequency = 180000;     // frequency of the pulses given (default 1 ever 3 minutes)
 
 // OD
-const byte pinODLED = 6;                  // pin that powers the OD LED - move away from using the TX
+const byte pinODLED = 7;                  // pin that powers the OD LED - move away from using the TX
 const byte pinODRead = A1;                // pin that reads the OD sensor
 const byte pinValve = 3;                  // pin that controls the valve
 float ODDesired = 0.2;                    // Set desired OD
@@ -89,22 +83,10 @@ float ODMin[10];                          // stores recent OD measurements (curr
 float OD3MinAvg;
 float ODZero = 0;                         // photodiode blank reading 
 
-// Temp - temp is temperature of sensor (metal) unless otherwise indicated
-const byte pinTempRead = A0;              // analog input will read variable voltage from AD22100
-// const byte pinTempWrite = 5;              // sends PWM to resistors to control temp
-float tempDesired = 37;                   // Set desired temperature
-float tempPrintAvg;                       // temperature converted to water temp
-double temp, tempPWM, tempDesiredPID;
-double aggKp = .5, aggKi = 0.1, aggKd = 0.1;
-double consKp = .2, consKi = 0.01, consKd = 0.05;
-PID tempPID(&temp, &tempPWM, &tempDesiredPID, aggKp, aggKi, aggKd, DIRECT);
-
-// UV LED
-const byte pinUVLED = 2;                  // pin that powers the UV LED
-
 // Modes
 boolean debugMode = true;
 boolean calibrationMode = false;
+boolean exhibitionMode = false;
 
 // SD
 const int pinSD = 4;
@@ -133,14 +115,6 @@ void setup() {
   digitalWrite(pinODRead, HIGH);            // enable 20k pullup resistor
   pinMode(pinValve, OUTPUT);                // pin that controls valve is output
   digitalWrite(pinValve, LOW);              // valve open at start
-
-  // Temp Control
-  pinMode(pinTempRead, INPUT);              // pin that reads the temp sensor is input
-  // pinMode(pinTempWrite, OUTPUT);            // pin that controls heating resistors is output
-  tempSet(); // call to Evo_Temp.ino
-  tempPID.SetMode(AUTOMATIC);
-  tempPID.SetSampleTime(10000);
-  tempPID.SetOutputLimits(0, 70);
 
   // Timer
   
@@ -184,20 +158,20 @@ void loop() {
 
     // Feed pulse if threshold is reached and it's been long enough
     currentMs = millis();
-    if (OD3MinAvg > ODDesired && currentMs - oldMsPulseFed > feedFrequency) {
-      pulseFeed(); // call to Evo_Flow
-      oldMsPulseFed = currentMs;
-    }
+    
+    if(exhibitionMode) {
+      
+      // if its exhibition mode we want the motor to pulse for a minute every 10 minutes? = 90ml an hour, = the entire bacteria is diluted
+      // pulse for 30 seconds every 5 - 10 minutes
+    
+    } else {
+    
+      if (OD3MinAvg > ODDesired && currentMs - oldMsPulseFed > feedFrequency) {
+        pulseFeed(); // call to Evo_Flow
+        oldMsPulseFed = currentMs;
+      }
+    }    
   }
-
-  // Check temp every 5 seconds
-//  currentMs = millis();                    
-//  if (currentMs - oldMsTempRead > 5000) {  
-//    tempRead(); // call to Evo_Temp
-//    oldMsTempRead = currentMs;
-//  }
-  // PID adjust every 10 seconds
-//  tempWrite(); 
 
   // Check and adjust time if neccessary
   currentMs = millis();
@@ -207,9 +181,9 @@ void loop() {
   webLoop(); 
   // currently this loop makes no call to the startRun() function, which is the one doing the main work
   // startRun();
-  // if (!tStart) {
-    //startRun();
-  //}
+  if (!tStart) {
+    startRun();
+  }
 }
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Functions - List function calls below <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 

@@ -97,8 +97,8 @@ void SDDataLog(char c, int count, float value) {
     dataFile.print(",");
   }
 
-  dataFile.print(tempPrintAvg);
-  dataFile.print("\n");
+//  dataFile.print(tempPrintAvg);
+//  dataFile.print("\n");
   dataFile.close(); 
 }
 
