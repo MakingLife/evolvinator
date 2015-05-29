@@ -38,7 +38,7 @@ Evolvinator
 byte mac[] = { 
   0x90, 0xA2, 0xDA, 0x00, 0x4F, 0x74 };   // ENTER MAC address of ethernet shield
 IPAddress ip(192, 168, 1, 88);          // ENTER IP address 
-// LAN IP address = 192.168.1.36
+// LAN IP address = 192.168.1.88
 // DHcp address printer sketch returned 192.168.119.215, however it returns a dynamic address each time via eduroam
 //  will need to run this off a LAN because of eduoroam
 
@@ -50,10 +50,16 @@ IPAddress ip(192, 168, 1, 88);          // ENTER IP address
 EthernetServer server(80);                // default web request server
 EthernetUDP Udp; // UDP is used as the protocol and buffer to best retrieve the time from one of the NTP server
 
+// Relay Modules
+// currently employing an active low relay module, ergo different constants required for triggering the relay driven components
+
+const boolean RELAYHIGH = !HIGH;
+const boolean RELAYLOW = !LOW;
+
 // Lights
 /* simulated day lengths required */
 
-unsigned long dayLengthStep = 30; // the value which when elapsed in microseconds will dim the lights of the evolvinator
+unsigned long dayLengthStep = 5; // the value which when elapsed in microseconds will dim the lights of the evolvinator
 unsigned long oldDayLengthRead = 0;
 int lightArc = 0;
 int lightStep = 1;
@@ -82,7 +88,7 @@ unsigned long msElapsedPrestart;          // ms elapsed run start.
 
 // Flow
 const byte pinP1FlowWrite = 8;            // which pin tells p1 (through pin 14) what speed (0-200 Hz)
-unsigned long feedFrequency = 60000;     // frequency of the pulses given (default 1 ever 3 minutes), 300000 = once every 5 minutes
+unsigned long feedFrequency = 30000;     // frequency of the pulses given (default 1 ever 3 minutes), 300000 = once every 5 minutes
 
 // OD
 const byte pinODLED = 7;                  // pin that powers the OD LED - move away from using the TX
@@ -124,10 +130,11 @@ void setup() {
   pinMode(pinODRead, INPUT);                // pin that reads photodiode is input
   digitalWrite(pinODRead, HIGH);            // enable 20k pullup resistor
   pinMode(pinValve, OUTPUT);                // pin that controls valve is output
-  digitalWrite(pinValve, LOW);              // valve open at start
+  digitalWrite(pinValve, RELAYLOW);              // valve open at start - humidifier should be normally closed
 
   // Lights
   pinMode(11, OUTPUT);
+  pinMode(12, OUTPUT);
 
   // Timer
   
@@ -154,6 +161,9 @@ void setup() {
   
     // SD
   SD.begin(pinSD);
+  
+  digitalWrite(pinP1FlowWrite, RELAYLOW);
+  digitalWrite(pinValve, RELAYLOW);
 
 }
 
@@ -165,6 +175,7 @@ void loop() {
     // Take OD measurement ever minute
     currentMs = millis();
     analogWrite(11, lightArc);
+    analogWrite(12, lightArc);
     if (currentMs - oldMsODRead > 60000) {
       ODRead(); // call to Evo_OD
       oldMsODRead = currentMs;
@@ -211,15 +222,19 @@ void loop() {
   webLoop(); 
   // currently this loop makes no call to the startRun() function, which is the one doing the main work
   // startRun();
-//  if (!tStart) {
-//    startRun();
-//  }
+  if (!tStart) {
+    startRun();
+  }
 }
 
 boolean exhibitionPulse(){
-  digitalWrite(pinP1FlowWrite, HIGH);
-  delay(5000);
-  digitalWrite(pinP1FlowWrite, LOW);
+  digitalWrite(pinValve, RELAYHIGH);                   // close valve ???
+  delay(2000); 
+  digitalWrite(pinP1FlowWrite, RELAYHIGH);
+  delay(15000);
+  digitalWrite(pinP1FlowWrite, RELAYLOW);
+  delay(30);
+  digitalWrite(pinValve, RELAYLOW);                    // turn air back on ???
   return true;
 }
 
@@ -251,6 +266,6 @@ void startRun() {
   tUnixStart += (millis() - msElapsedPrestart) / 1000;    // to adjust unix time
   tUnix = tUnixStart + tElapsed;
   SDInitialize();
-  digitalWrite(pinValve, LOW);          // open air valve
+  digitalWrite(pinValve, RELAYLOW);          // open air valve ????
 }
 

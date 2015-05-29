@@ -18,7 +18,7 @@ float ODRead() {
   int diodeLightOffAvg = 0;
   static unsigned long oldMsOD10MinAvg = 0;       // static variables are only declared the first time the function runs
 
-  digitalWrite(pinValve, HIGH);                   // close valve
+  digitalWrite(pinValve, RELAYHIGH);                   // close valve ???
   delay(2000);                                    // delay to let bubbles dissapate
 
   for (int x = 9; x > 0; x--) {                   // move data down for 10 min avg
@@ -47,7 +47,7 @@ float ODRead() {
     delayMicroseconds(1);
   }
 
-  digitalWrite(pinValve, LOW);                    // turn air back on
+  digitalWrite(pinValve, RELAYLOW);                    // turn air back on ???
 
   // diodeReading /= 5;
   if (diodeReading < 1) {                         // correct for super high OD
@@ -84,7 +84,7 @@ float ODCalibrate() {
   int diodeLightOnAvg = 0;
   int diodeLightOffAvg = 0;
 
-  digitalWrite(pinValve, HIGH);                     
+  digitalWrite(pinValve, RELAYHIGH);                // ???     
   delay(2000);                                     
 
   ODZero = 0;                                       
@@ -110,7 +110,7 @@ float ODCalibrate() {
   ODZero /= 10;                                     
 
   if (tStart) {
-    digitalWrite(pinValve, LOW);
+    digitalWrite(pinValve, RELAYLOW);
   }
 
   if (debugMode) {
