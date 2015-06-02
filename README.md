@@ -1,25 +1,8 @@
-Initial Sketch Size: Binary sketch size: 43,314 bytes (of a 258,048 byte maximum)
+This repository adapts the m OpenWetware Turbidostat](http://openwetware.org/wiki/Turbidostat) for use in the Making Life funded artwork m 'Star Beasts'](http://bioartsociety.fi/making_life/)
 
-Arduino Uno Sketch Size Maximum == 32,256 byte maximum
+The branch 'Exhibition' is currently the most up to date, however this version of the code contains many undesirable deprecations which will be remedied in the coming months.
 
-Code will execute upon upload, even if SD, ethernet and sensors hardware dependencies are not met
+The hardware required is an Arduino Mega and an Ethernet shield.
 
-Yet To Implement
+The currently inactive branch chrome-reconcile represents an attempt to port the ethernet access functionality to a Serial only interface. The ethernet libraries have a large memory footprint, so replacing them with other connectivity represents a desirable step in this projects life cycle
 
-SD debugging
-
-Native SD debug info
-
-the SD card logging specified within evolvinator works, however it is not possible to debug the SD card via CardInfo (example sketch) when shield is connected to Mega. Presently checking successful logging requires loading SD into main computer, or loading it to an Uno board with CardInfo script (and utilising a different SD shield)
-
-// If you are using multiple shields, make sure each has a unique mac address.
-
-^~> Will need to liase with Erich regarding the network setup of the gallery space
-
-Debugging Arduino IDE on Linux
-
-Successful workarounds
--  rm .arduino/preferences.txt 
-supplying Mega Board with source of voltage that isn't a USB hub. Fluctuations in some USB power outages = out of sync errors
-When supplying external power heed summary section here http://www.arduino.cc/en/Main/arduinoBoardMega and ensure that USB is connected first (so that port is detected) then external power is supplied
-Other Causes For Fail well explained here http://arduino.stackexchange.com/questions/739/arduino-program-only-works-when-run-as-root
