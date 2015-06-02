@@ -38,14 +38,7 @@ Evolvinator
 byte mac[] = { 
   0x90, 0xA2, 0xDA, 0x00, 0x4F, 0x74 };   // ENTER MAC address of ethernet shield
 IPAddress ip(192, 168, 1, 88);          // ENTER IP address 
-// LAN IP address = 192.168.1.88
-// DHcp address printer sketch returned 192.168.119.215, however it returns a dynamic address each time via eduroam
-//  will need to run this off a LAN because of eduoroam
 
-/*byte mac[] = { 
- 0x90, 0xA2, 0xDA, 0x00, 0x59, 0x5E };    
- byte ip[] = { 
- 192, 168, 100, 53 };*/
 // static ip address to connect to
 EthernetServer server(80);                // default web request server
 EthernetUDP Udp; // UDP is used as the protocol and buffer to best retrieve the time from one of the NTP server
@@ -169,18 +162,11 @@ void setup() {
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Loop - is program <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 void loop() {
-//    Serial.print("feed frequency = ");
-//    Serial.println(feedFrequency);
-  // If run has started
-//  if (tStart) {
+
     // Take OD measurement ever minute
     currentMs = millis();
     analogWrite(11, lightArc);
     analogWrite(12, lightArc);
-//    if (currentMs - oldMsODRead > 60000) {
-//      ODRead(); // call to Evo_OD
-//      oldMsODRead = currentMs;
-//    }
 
     // Feed pulse if threshold is reached and it's been long enough
     currentMs = millis();
@@ -214,27 +200,6 @@ void loop() {
       }
        
     } 
-//    
-//    else {
-//    
-//      if (OD3MinAvg > ODDesired && currentMs - oldMsPulseFed > feedFrequency) {
-//        pulseFeed(); // call to Evo_Flow
-//        oldMsPulseFed = currentMs;
-//      }
-//    }    
-//  } // end if start
-
-  // Check and adjust time if neccessary
-  //currentMs = millis();
-  //timeCheck();  // call to EvoTime
-  
-  // Check for web requests
-  //webLoop(); 
-  // currently this loop makes no call to the startRun() function, which is the one doing the main work
-  // startRun();
-//  if (!tStart) {
-//    startRun();
-//  }
 }
 
 boolean exhibitionPulse(){
