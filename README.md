@@ -1,6 +1,6 @@
 Significant amendments made to initial evolvinator code for purposes of exhibition.
 
-Additionally several more compact arduino sketches are included here. These scripts were loaded to separate arduino boards to provide evocative illumination of the Star Beasts object, respectively they are EarthDayLength and SevSegClock.
+Additionally several more compact arduino sketches are included here (within /companion_sketches). These scripts were loaded to separate arduino boards to provide evocative illumination of the Star Beasts object, respectively they are EarthDayLength and SevSegClock.
 
 A dramatic amount of functionality has been deprecated in order to have the unit functioning without ethernet connectivity and debug ability, as was the case in the gallery
 
@@ -16,7 +16,7 @@ Ethernet functionality remains intact, but gallery installation did not avail of
 
 The .ino scripts in the root directory are the files required to run the evolvinator apparatus
 
-The folders EarthDayLength and SevSegClock are self contained arduino scripts designed to be used with a board of LEDs and a LEDs plus Seven Segment Display respectively.
+The folders companion_sketches/EarthDayLength and companion_sketches/SevSegClock are self contained arduino scripts designed to be used with a board of LEDs and a LEDs plus Seven Segment Display respectively. To install them they must be extracted from the root folder of the evolvinator
 
 Your local install of arduino needs to use the following libraries 
 
