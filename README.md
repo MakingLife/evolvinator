@@ -21,11 +21,11 @@ The folders companion_sketches/EarthDayLength and companion_sketches/SevSegClock
 Your local install of arduino needs to use the following libraries 
 
 ~~evolvinator
-SPI.h
-Ethernet.h
-EthernetUdp.h
-Time.h
-SD.h
+SPI.h//
+Ethernet.h//
+EthernetUdp.h//
+Time.h//
+SD.h//
 
 ~~companion scripts
 
