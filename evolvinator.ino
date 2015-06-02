@@ -59,7 +59,7 @@ const boolean RELAYLOW = !LOW;
 // Lights
 /* simulated day lengths required */
 
-unsigned long dayLengthStep = 5; // the value which when elapsed in microseconds will dim the lights of the evolvinator
+unsigned long dayLengthStep = 5806; // the value which when elapsed in microseconds will dim the lights of the evolvinator
 unsigned long oldDayLengthRead = 0;
 int lightArc = 0;
 int lightStep = 1;
@@ -88,7 +88,7 @@ unsigned long msElapsedPrestart;          // ms elapsed run start.
 
 // Flow
 const byte pinP1FlowWrite = 8;            // which pin tells p1 (through pin 14) what speed (0-200 Hz)
-unsigned long feedFrequency = 30000;     // frequency of the pulses given (default 1 ever 3 minutes), 300000 = once every 5 minutes
+unsigned long feedFrequency = 18000000;     // frequency of the pulses given (default 1 ever 3 minutes), 300000 = once every 5 minutes
 
 // OD
 const byte pinODLED = 7;                  // pin that powers the OD LED - move away from using the TX
@@ -142,7 +142,7 @@ void setup() {
   
   // hardcoded time
   if (debugMode) {
-    setTime(15,43,0,20,5,15); // (hr,min,sec,day,month,yr) CALIBRATION
+    setTime(19,40,0,22,5,15); // (hr,min,sec,day,month,yr) CALIBRATION
     setSyncInterval(60 * 5);
   } else {
     // network synced time
@@ -169,17 +169,18 @@ void setup() {
 
 /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Loop - is program <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 void loop() {
-
+//    Serial.print("feed frequency = ");
+//    Serial.println(feedFrequency);
   // If run has started
-  if (tStart) {
+//  if (tStart) {
     // Take OD measurement ever minute
     currentMs = millis();
     analogWrite(11, lightArc);
     analogWrite(12, lightArc);
-    if (currentMs - oldMsODRead > 60000) {
-      ODRead(); // call to Evo_OD
-      oldMsODRead = currentMs;
-    }
+//    if (currentMs - oldMsODRead > 60000) {
+//      ODRead(); // call to Evo_OD
+//      oldMsODRead = currentMs;
+//    }
 
     // Feed pulse if threshold is reached and it's been long enough
     currentMs = millis();
@@ -200,38 +201,47 @@ void loop() {
       
       // the LEDs are also designed to be mapped to a cyclic duration - day length abstracted to ms, using currentMs as the base 
       if(currentMs - oldMsPulseFed > feedFrequency){
+        Serial.println(currentMs - oldMsPulseFed);
         // pulse for 30 seconds every 5 minutes, diluting culure in 100ml chamber by 5.5ml
-        exhibitionPulse();
+          digitalWrite(pinValve, RELAYHIGH);                   // close valve ???
+          delay(2000); 
+          digitalWrite(pinP1FlowWrite, RELAYHIGH);
+          delay(30000);
+          digitalWrite(pinP1FlowWrite, RELAYLOW);
+          delay(30);
+          digitalWrite(pinValve, RELAYLOW);                    // turn air back on ???
         oldMsPulseFed = currentMs;
       }
        
-    } else {
-    
-      if (OD3MinAvg > ODDesired && currentMs - oldMsPulseFed > feedFrequency) {
-        pulseFeed(); // call to Evo_Flow
-        oldMsPulseFed = currentMs;
-      }
-    }    
-  }
+    } 
+//    
+//    else {
+//    
+//      if (OD3MinAvg > ODDesired && currentMs - oldMsPulseFed > feedFrequency) {
+//        pulseFeed(); // call to Evo_Flow
+//        oldMsPulseFed = currentMs;
+//      }
+//    }    
+//  } // end if start
 
   // Check and adjust time if neccessary
-  currentMs = millis();
-  timeCheck();  // call to EvoTime
+  //currentMs = millis();
+  //timeCheck();  // call to EvoTime
   
   // Check for web requests
-  webLoop(); 
+  //webLoop(); 
   // currently this loop makes no call to the startRun() function, which is the one doing the main work
   // startRun();
-  if (!tStart) {
-    startRun();
-  }
+//  if (!tStart) {
+//    startRun();
+//  }
 }
 
 boolean exhibitionPulse(){
   digitalWrite(pinValve, RELAYHIGH);                   // close valve ???
   delay(2000); 
   digitalWrite(pinP1FlowWrite, RELAYHIGH);
-  delay(15000);
+  delay(30000);
   digitalWrite(pinP1FlowWrite, RELAYLOW);
   delay(30);
   digitalWrite(pinValve, RELAYLOW);                    // turn air back on ???
@@ -268,4 +278,5 @@ void startRun() {
   SDInitialize();
   digitalWrite(pinValve, RELAYLOW);          // open air valve ????
 }
+
 
