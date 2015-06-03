@@ -1,6 +1,6 @@
 This repository adapts the [OpenWetware Turbidostat](http://openwetware.org/wiki/Turbidostat) for use in the Making Life funded artwork ['Star Beasts'](http://bioartsociety.fi/making_life/)
 
-The branch 'Exhibition' is currently the most up to date, however this version of the code contains many undesirable deprecations which will be remedied in the coming months.
+The branch ['Exhibition'](https://github.com/MakingLife/evolvinator/tree/exhibition) is currently the most up to date, however this version of the code contains many undesirable deprecations which will be remedied in the coming months.
 
 The hardware required is an Arduino Mega and an Ethernet shield.
 
