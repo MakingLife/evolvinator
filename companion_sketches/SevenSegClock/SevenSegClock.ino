@@ -36,6 +36,11 @@ int segG = 8; //Display pin 5
 
 */
 
+/*
+Current wiring presumes this display http://nicuflorica.blogspot.ro/2013/06/afisaje-led-cu-7-segmente-si-arduino.html, see this wiring diagram for more http://1.bp.blogspot.com/-4atTBm_Zf48/UcQ7QicbaUI/AAAAAAAAJp4/fL1-AA1s9M0/s1600/arduino_4_digit_7_segment_display_schematic.png
+
+ */
+
 SevenSeg disp(A1, 2, 4, 12, A0, 7, 8);
 const int numOfDigits=4;
 int digitPins[numOfDigits]={11,10,9,6};
