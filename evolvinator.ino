@@ -39,14 +39,6 @@ Evolvinator
 byte mac[] = { 
   0x90, 0xA2, 0xDA, 0x00, 0x4F, 0x74 };   // ENTER MAC address of ethernet shield
 IPAddress ip(192, 168, 1, 88);          // ENTER IP address 
-// LAN IP address = 192.168.1.36
-// DHcp address printer sketch returned 192.168.119.215, however it returns a dynamic address each time via eduroam
-//  will need to run this off a LAN because of eduoroam
-
-/*byte mac[] = { 
- 0x90, 0xA2, 0xDA, 0x00, 0x59, 0x5E };    
- byte ip[] = { 
- 192, 168, 100, 53 };*/
 // static ip address to connect to
 EthernetServer server(80);                // default web request server
 EthernetUDP Udp; // UDP is used as the protocol and buffer to best retrieve the time from one of the NTP server
@@ -136,7 +128,7 @@ void setup() {
 
   // Temp Control
   pinMode(pinTempRead, INPUT);              // pin that reads the temp sensor is input
-  // pinMode(pinTempWrite, OUTPUT);            // pin that controls heating resistors is output
+  pinMode(pinTempWrite, OUTPUT);            // pin that controls heating resistors is output
   tempSet(); // call to Evo_Temp.ino
   tempPID.SetMode(AUTOMATIC);
   tempPID.SetSampleTime(10000);
@@ -191,13 +183,13 @@ void loop() {
   }
 
   // Check temp every 5 seconds
-//  currentMs = millis();                    
-//  if (currentMs - oldMsTempRead > 5000) {  
-//    tempRead(); // call to Evo_Temp
-//    oldMsTempRead = currentMs;
-//  }
-  // PID adjust every 10 seconds
-//  tempWrite(); 
+  currentMs = millis();                    
+  if (currentMs - oldMsTempRead > 5000) {  
+    tempRead(); // call to Evo_Temp
+    oldMsTempRead = currentMs;
+  }
+//   PID adjust every 10 seconds
+  tempWrite(); 
 
   // Check and adjust time if neccessary
   currentMs = millis();
@@ -205,8 +197,7 @@ void loop() {
   
   // Check for web requests
   webLoop(); 
-  // currently this loop makes no call to the startRun() function, which is the one doing the main work
-  // startRun();
+  // uncomment below for a quick fix on ensuring hardware is functional
   // if (!tStart) {
     //startRun();
   //}

@@ -63,6 +63,7 @@ float ODRead() {
   //   ODMin[0] = 0;
   // }
   // ^~> set it to 0 if negative value is read - this was causing the ODMin[0] to be constantly set to 0
+  // uncommenting until OD calibration readings are attained
   OD3MinAvg = (ODMin[0] + ODMin[1] + ODMin[2]) / 3;
 
   ODCount += 1; 
